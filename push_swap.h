@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/25 21:32:43 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/26 14:16:25 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,21 @@ void			free_d_error_print_exit(t_deque *d, const char *err_str);
 */
 typedef enum e_instruct
 {
-	INSTRUCT_SA		= 0x00010,
-	INSTRUCT_SB,
-	INSTRUCT_SS,
-	INSTRUCT_PA		= 0x00100,
-	INSTRUCT_PB,
-	INSTRUCT_RA		= 0x01000,
-	INSTRUCT_RB,
-	INSTRUCT_RR,
-	INSTRUCT_RRA	= 0x10000,
-	INSTRUCT_RRB,
-	INSTRUCT_RRR,
+	INSTRUCT_SA			= 0x0001 << 0,
+	INSTRUCT_SB			= 0x0001 << 1,
+	INSTRUCT_SS			= 0x0001 << 2,
+	INSTRUCT_S_FLAG		= 0x000F,
+	INSTRUCT_PA			= 0x0010 << 0,
+	INSTRUCT_PB			= 0x0010 << 1,
+	INSTRUCT_P_FLAG		= 0x00F0,
+	INSTRUCT_RA			= 0x0100 << 0,
+	INSTRUCT_RB			= 0x0100 << 1,
+	INSTRUCT_RR			= 0x0100 << 2,
+	INSTRUCT_R_FLAG		= 0x0F00,
+	INSTRUCT_RRA		= 0x1000 << 0,
+	INSTRUCT_RRB		= 0x1000 << 1,
+	INSTRUCT_RRR		= 0x1000 << 2,
+	INSTRUCT_RR_FLAG	= 0xF000,
 }	t_instruct;
 
 void			instruct_run(t_instruct instruct);
@@ -93,15 +97,14 @@ typedef enum e_state_parse
 
 typedef struct s_state_data
 {
-	int	sign;
-	int	num;
+	t_node_data	sign;
+	t_node_data	num;
 }	t_state_data;
 
 t_e_state_parse	state_parse_space(char s, t_state_data *data);
-t_e_state_parse	state_parse_sign(char s, int *num);
+t_e_state_parse	state_parse_sign(char s, t_state_data *data);
 t_e_state_parse	state_parse_num(char s, t_state_data *data, t_deque *d);
-void			check_finish(t_e_state_parse state, t_state_data *data,
-					t_deque *d);
+void			check_finish(t_e_state_parse state, t_node_data n, t_deque *d);
 void			parse_arg(char *argv[], t_deque *d);
 
 #endif
