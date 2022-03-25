@@ -6,12 +6,12 @@
 #    By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 16:06:51 by min-jo            #+#    #+#              #
-#    Updated: 2022/03/24 19:46:14 by min-jo           ###   ########.fr        #
+#    Updated: 2022/03/25 21:09:02 by min-jo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	push_swap
-SRC			=	push_swap.c instruct.c dequeue.c
+SRC			=	main.c dequeue.c error.c instruct.c parse_state.c
 BDRC		=
 OBJ			=	$(SRC:.c=.o)
 BOBJ		=	$(BSRC:.c=.o)

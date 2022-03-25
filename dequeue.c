@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dequeue.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/25 01:44:26 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/25 21:33:06 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,24 @@ t_node	*new_node(t_node_data data, t_deque *free_d)
 
 	n = malloc(sizeof(t_node));
 	if (NULL == n)
-	{
-		deque_free(free_d);
-		if (-1 == write(STDERR_FILENO, "node malloc fail\n", 17))
-			exit(EX_IOERR);
-		exit(EXIT_FAILURE);
-	}
+		free_d_error_print_exit(free_d, "node malloc fail\n");
+	n->data = data;
 	return (n);
 }
 
-t_deque	*new_deque(void)
+t_deque	*new_deque(t_deque *free_d)
 {
 	t_deque	*d;
 
 	d = malloc(sizeof(t_deque));
 	if (NULL == d)
-	{
-		if (-1 == write(STDERR_FILENO, "deque malloc fail\n", 18))
-			exit(EX_IOERR);
-		exit(EXIT_FAILURE);
-	}
-	d->head = new_node(DUMMY_NODE_DATA, &d);
-	d->tail = new_node(DUMMY_NODE_DATA, &d);
-	d->head->before = NULL;
-	d->head->next = d->tail;
-	d->tail->before = d->head;
-	d->tail->next = NULL;
+		free_d_error_print_exit(free_d, "deque malloc fail\n");
+	d->head.before = NULL;
+	d->head.next = &d->tail;
+	d->tail.before = &d->head;
+	d->tail.next = NULL;
 	d->size = 0;
+	return (d);
 }
 
 void	deque_push(t_deque *d, t_node_data data, t_e_deque where)
@@ -55,26 +46,23 @@ void	deque_push(t_deque *d, t_node_data data, t_e_deque where)
 	t_node	*n;
 
 	if (!d)
-	{
-		if (-1 == write(STDERR_FILENO, "deque pointer NULL but push\n", 28))
-			exit(EX_IOERR);
-		exit(EXIT_FAILURE);
-	}
+		error_print_exit("deque pointer NULL but push\n");
 	n = new_node(data, d);
-	if (E_DEQUE_HEAD == where)
+	if (DEQUE_HEAD == where)
 	{
-		n->before = d->head;
-		n->next = d->head->next;
-		d->head->next->before = n;
-		d->head->next = n;
+		n->before = &d->head;
+		n->next = d->head.next;
+		d->head.next->before = n;
+		d->head.next = n;
 	}
-	else if (E_DEQUE_TAIL == where)
+	else if (DEQUE_TAIL == where)
 	{
-		n->before = d->tail->before;
-		n->next = d->tail;
-		d->tail->before->next = n;
-		d->tail->before = n;
+		n->before = d->tail.before;
+		n->next = &d->tail;
+		d->tail.before->next = n;
+		d->tail.before = n;
 	}
+	d->size++;
 }
 
 /*
@@ -86,25 +74,21 @@ t_node_data	deque_pop(t_deque *d, t_e_deque where)
 	t_node_data	ret;
 
 	if (!d)
+		error_print_exit("deque pointer NULL but pop\n");
+	if (0 == d->size)
+		free_d_error_print_exit(d, "deque size 0 but pop\n");
+	if (DEQUE_HEAD == where)
 	{
-		if (-1 == write(STDERR_FILENO, "deque pointer NULL but pop\n", 27))
-			exit(EX_IOERR);
-		exit(EXIT_FAILURE);
+		n = d->head.next;
+		d->head.next = n->next;
+		n->next->before = &d->head;
 	}
-	if (E_DEQUE_HEAD == where)
-	{
-		n = d->head->next;
-		d->head->next = n->next;
-		n->next->before = d->head;
-	}
-	else if (E_DEQUE_TAIL == where)
-	{
-		n = d->tail->before;
-		d->tail->before = n->before;
-		n->before->next = d->tail;
-	}
+	n = d->tail.before;
+	d->tail.before = n->before;
+	n->before->next = &d->tail;
 	ret = n->data;
 	free(n);
+	d->size--;
 	return (ret);
 }
 
@@ -120,12 +104,27 @@ void	deque_free(t_deque *d)
 
 	if (!d)
 		return ;
-	n = d->head;
-	while (n)
+	n = d->head.next;
+	while (n && n != &d->tail)
 	{
 		tmp = n->next;
 		free(n);
 		n = tmp;
 	}
 	free(d);
+}
+
+// 이 함수 체크용이라 지워야 함
+#include <stdio.h>
+void	deque_print(t_deque *d)
+{
+	t_node	*n = d->head.next;
+	int		cnt = 0;
+
+	while (n && n != &d->tail)
+	{
+		printf("cnt %d : data %d : node %p\n", cnt, n->data, n);
+		n = n->next;
+		cnt++;
+	}
 }

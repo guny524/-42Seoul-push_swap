@@ -1,36 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/24 16:07:49 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/24 19:15:56 by min-jo           ###   ########.fr       */
+/*   Created: 2022/03/25 16:13:02 by min-jo            #+#    #+#             */
+/*   Updated: 2022/03/25 19:36:44 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include "push_swap.h"
 
-void	exit_error(char **free_arg) //#
+size_t	ft_strlen(const char *str)
 {
-	if (-1 == write(STDERR_FILENO, "Error\n", 6))
+	size_t	cnt;
+
+	cnt = 0;
+	while (*str)
+	{
+		str++;
+		cnt++;
+	}
+	return (cnt);
+}
+
+void	error_print_exit(const char *err_str)
+{
+	if (-1 == write(STDERR_FILENO, err_str, ft_strlen(err_str)))
 		exit(EX_IOERR);
-	if (free_arg) //#
-		free(free_arg); //#
 	exit(EXIT_FAILURE);
 }
 
-//# split 안 쓰고 atoi에서 주소 리턴해서
-//#
-//# int가 아니어도
-//# int보다 커도
-//# 중복 되어도 Error 출력해야 함
-
-int	main(int argc, char *argv[])
+void	free_d_error_print_exit(t_deque *d, const char *err_str)
 {
-
-	return (EXIT_SUCCESS);
+	if (d)
+		deque_free(d);
+	error_print_exit(err_str);
 }
