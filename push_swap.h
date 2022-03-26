@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/26 14:16:25 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/26 15:00:04 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void			deque_print(t_deque *d);
 size_t			ft_strlen(const char *str);
 void			error_print_exit(const char *err_str);
 void			free_d_error_print_exit(t_deque *d, const char *err_str);
+void			check_dup_exit(t_deque *d);
 /*
 * instructions.c
 */
