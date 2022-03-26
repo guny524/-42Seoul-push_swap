@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dequeue.c                                          :+:      :+:    :+:   */
+/*   deque.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/25 21:33:06 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/26 22:16:52 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,12 @@ t_node_data	deque_pop(t_deque *d, t_e_deque where)
 		d->head.next = n->next;
 		n->next->before = &d->head;
 	}
-	n = d->tail.before;
-	d->tail.before = n->before;
-	n->before->next = &d->tail;
+	else
+	{
+		n = d->tail.before;
+		d->tail.before = n->before;
+		n->before->next = &d->tail;
+	}
 	ret = n->data;
 	free(n);
 	d->size--;
@@ -121,10 +124,14 @@ void	deque_print(t_deque *d)
 	t_node	*n = d->head.next;
 	int		cnt = 0;
 
+	printf("d : %p\n", d);
+	// printf("head : %p, data : %d, before : %p, next : %p\n", &d->head, d->head.data, d->head.before, d->head.next);
+	// printf("tail : %p, data : %d, before : %p, next : %p\n", &d->tail, d->tail.data, d->tail.before, d->tail.next);
 	while (n && n != &d->tail)
 	{
-		printf("cnt %d : data %d : node %p\n", cnt, n->data, n);
+		printf("cnt : %d, node : %p, data : %d, before : %p, next : %p\n", cnt, n, n->data, n->before, n->next);
 		n = n->next;
 		cnt++;
 	}
+	printf("\n");
 }

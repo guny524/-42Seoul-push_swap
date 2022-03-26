@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/26 14:17:31 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/26 21:47:56 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_e_state_parse	state_parse_num(char s, t_state_data *data, t_deque *d)
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
 	{
-		deque_push(d, data->num, DEQUE_HEAD);
+		deque_push(d, data->num, DEQUE_TAIL);
 		*data = (t_state_data){1, 0};
 		return (STATE_PARSE_SPACE);
 	}
@@ -72,7 +72,7 @@ void	check_finish(t_e_state_parse state, t_node_data n, t_deque *d)
 	if (STATE_PARSE_ERROR == state || STATE_PARSE_SIGN == state)
 		free_d_error_print_exit(d, "Error\n");
 	else if (STATE_PARSE_NUM == state)
-		deque_push(d, n, DEQUE_HEAD);
+		deque_push(d, n, DEQUE_TAIL);
 }
 
 void	parse_arg(char *argv[], t_deque *d)

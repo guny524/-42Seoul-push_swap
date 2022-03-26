@@ -6,16 +6,16 @@
 #    By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 16:06:51 by min-jo            #+#    #+#              #
-#    Updated: 2022/03/25 21:09:02 by min-jo           ###   ########.fr        #
+#    Updated: 2022/03/26 22:09:34 by min-jo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	push_swap
-SRC			=	main.c dequeue.c error.c instruct.c parse_state.c
-BDRC		=
+SRC			=	main.c deque.c error.c parse_state.c instruct.c
+BDRC		=	deque.c error.c instruct.c # should add bonus
 OBJ			=	$(SRC:.c=.o)
 BOBJ		=	$(BSRC:.c=.o)
-CFLAGS		+=	-Wall -Wextra -Werror
+CFLAGS		+=	-Wall -Wextra -Werror -g
 # CPPFLAGS	=
 
 all:		$(NAME)
