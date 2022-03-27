@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/27 19:02:00 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/29 16:06:20 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ t_e_state_parse	state_parse_sign(char s, t_state_data *data)
 }
 
 t_e_state_parse	state_parse_num(char s, t_state_data *data, t_deque *a,
-					t_free_node *free_n)
+					t_frees *frees)
 {
 	t_node_data	tmp;
 
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
 	{
-		deque_push(a, data->num, DEQUE_TAIL, free_n);
+		deque_push(a, data->num, DEQUE_TAIL, frees);
 		*data = (t_state_data){1, 0};
 		return (STATE_PARSE_SPACE);
 	}
@@ -69,15 +69,15 @@ t_e_state_parse	state_parse_num(char s, t_state_data *data, t_deque *a,
 }
 
 void	check_finish(t_e_state_parse state, t_node_data n, t_deque *a,
-			t_free_node *free_n)
+			t_frees *frees)
 {
 	if (STATE_PARSE_ERROR == state || STATE_PARSE_SIGN == state)
-		free_n_error_print_exit(free_n, "Error\n");
+		free_n_error_print_exit(frees, "Error\n");
 	else if (STATE_PARSE_NUM == state)
-		deque_push(a, n, DEQUE_TAIL, free_n);
+		deque_push(a, n, DEQUE_TAIL, frees);
 }
 
-void	parse_arg(char *argv[], t_deque *a, t_free_node *free_n)
+void	parse_arg(char *argv[], t_deque *a, t_frees *frees)
 {
 	char			*str;
 	t_e_state_parse	state;
@@ -91,15 +91,15 @@ void	parse_arg(char *argv[], t_deque *a, t_free_node *free_n)
 		while (*str)
 		{
 			if (STATE_PARSE_ERROR == state)
-				free_n_error_print_exit(free_n, "Error\n");
+				free_n_error_print_exit(frees, "Error\n");
 			else if (STATE_PARSE_SPACE == state)
 				state = state_parse_space(*str, &data);
 			else if (STATE_PARSE_SIGN == state)
 				state = state_parse_sign(*str, &data);
 			else if (STATE_PARSE_NUM == state)
-				state = state_parse_num(*str, &data, a, free_n);
+				state = state_parse_num(*str, &data, a, frees);
 			str++;
 		}
-		check_finish(state, data.num, a, free_n);
+		check_finish(state, data.num, a, frees);
 	}
 }

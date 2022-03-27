@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:07:49 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/27 18:57:45 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/29 21:32:34 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,27 @@
 
 int	main(int argc, char *argv[])
 {
-	t_deque		*a;
-	t_deque		*b;
-	t_free_node	free_n;
+	t_deque	*a;
+	t_deque	*b;
+	t_frees	frees;
 
-	free_n.data = NULL;
-	free_n.next = NULL;
-	a = new_deque(&free_n);
-	parse_arg(argv + 1, a, &free_n);
-	check_dup_exit(a, &free_n);
-	b = new_deque(&free_n);
-	// deque_print(a); //#
-	// deque_print(b); //#
-	sort_push_swap(a, b, &free_n);
+	frees.arr = NULL;
+	frees.dp = NULL;
+	frees.free_n.data = NULL;
+	frees.free_n.next = NULL;
+	a = new_deque(&frees);
+	parse_arg(argv + 1, a, &frees);
+	check_dup_exit(a, &frees);
+	b = new_deque(&frees);
 	deque_print(a); //#
 	deque_print(b); //#
-	free_node_free(&free_n);
+	// indexing();
+	deque_print(a); //#
+	deque_print(b); //#
+	a_to_b(a, b, &frees);
+	deque_print(a); //#
+	deque_print(b); //#
+	frees_free(&frees);
 	argc = 1; //#
 	return (EXIT_SUCCESS);
 }
