@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:13:02 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/26 15:04:20 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/27 18:48:06 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,13 @@ void	error_print_exit(const char *err_str)
 	exit(EXIT_FAILURE);
 }
 
-void	free_d_error_print_exit(t_deque *d, const char *err_str)
+void	free_n_error_print_exit(t_free_node *free_n, const char *err_str)
 {
-	if (d)
-		deque_free(d);
+	free_node_free(free_n);
 	error_print_exit(err_str);
 }
 
-void	check_dup_exit(t_deque *d)
+void	check_dup_exit(t_deque *d, t_free_node *free_n)
 {
 	t_node	*y;
 	t_node	*x;
@@ -54,7 +53,7 @@ void	check_dup_exit(t_deque *d)
 		while (x != &d->tail)
 		{
 			if (y->data == x->data)
-				free_d_error_print_exit(d, "Error\n");
+				free_n_error_print_exit(free_n, "Error\n");
 			x = x->next;
 		}
 		y = y->next;

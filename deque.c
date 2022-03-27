@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/26 22:16:52 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/27 18:54:52 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,50 @@
 #include <sysexits.h>
 #include "push_swap.h"
 
-t_node	*new_node(t_node_data data, t_deque *free_d)
+t_node	*new_node(t_node_data data, t_free_node *free_n)
 {
 	t_node	*n;
 
 	n = malloc(sizeof(t_node));
 	if (NULL == n)
-		free_d_error_print_exit(free_d, "node malloc fail\n");
+		free_n_error_print_exit(free_n, "node malloc fail\n");
 	n->data = data;
 	return (n);
 }
 
-t_deque	*new_deque(t_deque *free_d)
+t_deque	*new_deque(t_free_node *free_n)
 {
-	t_deque	*d;
+	t_free_node	*fn;
+	t_deque		*d;
 
+	fn = malloc(sizeof(t_free_node));
+	if (NULL == fn)
+		free_n_error_print_exit(free_n, "free node malloc fail\n");
 	d = malloc(sizeof(t_deque));
 	if (NULL == d)
-		free_d_error_print_exit(free_d, "deque malloc fail\n");
+	{
+		free(fn);
+		free_n_error_print_exit(free_n, "deque malloc fail\n");
+	}
 	d->head.before = NULL;
 	d->head.next = &d->tail;
 	d->tail.before = &d->head;
 	d->tail.next = NULL;
 	d->size = 0;
+	fn->data = d;
+	fn->next = NULL;
+	free_n->next = fn;
 	return (d);
 }
 
-void	deque_push(t_deque *d, t_node_data data, t_e_deque where)
+void	deque_push(t_deque *d, t_node_data data, t_e_deque where,
+			t_free_node *free_n)
 {
 	t_node	*n;
 
 	if (!d)
-		error_print_exit("deque pointer NULL but push\n");
-	n = new_node(data, d);
+		free_n_error_print_exit(free_n, "deque pointer NULL but push\n");
+	n = new_node(data, free_n);
 	if (DEQUE_HEAD == where)
 	{
 		n->before = &d->head;
@@ -68,15 +79,15 @@ void	deque_push(t_deque *d, t_node_data data, t_e_deque where)
 /*
 * 항상 pop 하기 전에 0 == d->size 인지 체크해야 함
 */
-t_node_data	deque_pop(t_deque *d, t_e_deque where)
+t_node_data	deque_pop(t_deque *d, t_e_deque where, t_free_node *free_n)
 {
 	t_node		*n;
 	t_node_data	ret;
 
 	if (!d)
-		error_print_exit("deque pointer NULL but pop\n");
+		free_n_error_print_exit(free_n, "deque pointer NULL but pop\n");
 	if (0 == d->size)
-		free_d_error_print_exit(d, "deque size 0 but pop\n");
+		free_n_error_print_exit(free_n, "deque size 0 but pop\n");
 	if (DEQUE_HEAD == where)
 	{
 		n = d->head.next;
@@ -98,23 +109,31 @@ t_node_data	deque_pop(t_deque *d, t_e_deque where)
 /*
 * 항상 free 하고 바로 exit 해야 함
 * free 하고 바로 exit 하면 굳이 더블포인터 써서 댕글링 포인터 방지 안해도 됨
-* 그러니까 deque_free하고 바로 exit 안 하는 경우 생기면 신경쓰자
+* 그러니까 free_node_free 하고 바로 exit 안 하는 경우 생기면 신경쓰자
 */
-void	deque_free(t_deque *d)
+void	free_node_free(t_free_node *free_n)
 {
-	t_node	*n;
-	t_node	*tmp;
+	t_free_node	*fn_tmp;
+	t_deque		*d;
+	t_node		*n;
+	t_node		*n_tmp;
 
-	if (!d)
-		return ;
-	n = d->head.next;
-	while (n && n != &d->tail)
+	if (free_n)
+		free_n = free_n->next;
+	while (free_n)
 	{
-		tmp = n->next;
-		free(n);
-		n = tmp;
+		d = free_n->data;
+		n = d->head.next;
+		while (n && n != &d->tail)
+		{
+			n_tmp = n->next;
+			free(n);
+			n = n_tmp;
+		}
+		fn_tmp = free_n->next;
+		free(free_n);
+		free_n = free_n->next;
 	}
-	free(d);
 }
 
 // 이 함수 체크용이라 지워야 함

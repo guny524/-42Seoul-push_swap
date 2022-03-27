@@ -6,12 +6,12 @@
 #    By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 16:06:51 by min-jo            #+#    #+#              #
-#    Updated: 2022/03/26 22:09:34 by min-jo           ###   ########.fr        #
+#    Updated: 2022/03/27 15:05:23 by min-jo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	push_swap
-SRC			=	main.c deque.c error.c parse_state.c instruct.c
+SRC			=	main.c deque.c error.c parse_state.c instruct.c sort.c
 BDRC		=	deque.c error.c instruct.c # should add bonus
 OBJ			=	$(SRC:.c=.o)
 BOBJ		=	$(BSRC:.c=.o)
