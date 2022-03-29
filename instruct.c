@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:08:54 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/29 16:10:04 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/01 17:20:31 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	inst_swap(t_deque *d)
 
 	first = inst_pop(d, DEQUE_HEAD);
 	second = inst_pop(d, DEQUE_HEAD);
-	inst_push(d, second, DEQUE_HEAD);
 	inst_push(d, first, DEQUE_HEAD);
+	inst_push(d, second, DEQUE_HEAD);
 }
 
 void	inst_run(t_e_inst inst, t_deque *a, t_deque *b)
@@ -80,9 +80,9 @@ void	inst_run(t_e_inst inst, t_deque *a, t_deque *b)
 			inst_swap(b);
 	}
 	else if (INST_PA == inst && b->size >= 1)
-			inst_push(a, inst_pop(b, DEQUE_HEAD), DEQUE_HEAD);
+		inst_push(a, inst_pop(b, DEQUE_HEAD), DEQUE_HEAD);
 	else if (INST_PB == inst && a->size >= 1)
-			inst_push(b, inst_pop(a, DEQUE_HEAD), DEQUE_HEAD);
+		inst_push(b, inst_pop(a, DEQUE_HEAD), DEQUE_HEAD);
 	else if (INST_RA == inst || INST_RB == inst || INST_RR == inst)
 	{
 		if ((INST_RA == inst || INST_RR == inst) && a->size >= 1)
@@ -101,8 +101,8 @@ void	inst_run(t_e_inst inst, t_deque *a, t_deque *b)
 
 void	inst_run_print(t_e_inst inst, t_deque *a, t_deque *b, t_frees *frees)
 {
-	char *inst_str[] = {"sa\n", "sb\n", "ss\n", "pa\n", "pa\n",
-							"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"};
+	const char	*inst_str[] = {"sa\n", "sb\n", "ss\n", "pa\n", "pb\n",
+								"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"};
 
 	if (-1 == write(STDOUT_FILENO, inst_str[inst], ft_strlen(inst_str[inst])))
 	{

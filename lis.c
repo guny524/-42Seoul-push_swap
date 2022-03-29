@@ -6,14 +6,14 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 15:05:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/29 21:30:17 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/01 15:00:16 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "push_swap.h"
 
-t_node_data	*new_dp(size_t size, t_frees *frees)
+t_node_data	*new_node_data(size_t size, t_frees *frees)
 {
 	t_node_data	*ret;
 	size_t		i;
@@ -21,10 +21,6 @@ t_node_data	*new_dp(size_t size, t_frees *frees)
 	ret = malloc(sizeof(t_node_data) * size);
 	if (NULL == ret)
 		free_n_error_print_exit(frees, "arr malloc fail\n");
-	ret[0] = 1;
-	i = 0;
-	while (++i < size)
-		ret[i] = 0;
 	return (ret);
 }
 
@@ -33,7 +29,7 @@ void	new_arr(t_deque *d, t_frees *frees)
 	t_node		*n;
 	size_t		i;
 
-	frees->arr = new_dp(d->size, frees);
+	frees->arr = new_node_data(d->size, frees);
 	i = 0;
 	n = d->head.next;
 	while (n != &d->tail)
@@ -44,30 +40,39 @@ void	new_arr(t_deque *d, t_frees *frees)
 	}
 }
 
-t_deque	*make_lis(t_lis_v v, t_frees *frees)
+void	new_dp(size_t size, t_frees *frees)
 {
-	t_deque	*lis;
+	size_t		i;
 
-	lis = new_deque(frees);
+	frees->dp = new_node_data(size, frees);
+	i = -1;
+	while (++i < size)
+		frees->dp[i] = 1;
+}
+
+void	new_lis(t_lis_v v, t_frees *frees)
+{
+	frees->lis = new_node_data(v.max_dp, frees);
+	frees->lis_size = v.max_dp;
 	while (1)
 	{
 		--v.i;
 		if (v.max_dp == frees->dp[v.i])
-		{
-			--v.max_dp;
-			deque_push(lis, frees->arr[v.i], DEQUE_HEAD, frees);
-		}
+			frees->lis[--v.max_dp] = frees->arr[v.i];
 		if (0 == v.i)
 			break ;
 	}
-	return (lis);
+	free(frees->arr);
+	frees->arr = NULL;
+	free(frees->dp);
+	frees->dp = NULL;
 }
 
-t_deque	*lis_get(t_deque *d, t_frees *frees)
+void	lis(t_deque *d, t_frees *frees)
 {
 	t_lis_v		v;
 
-	frees->dp = new_dp(d->size, frees);
+	new_dp(d->size, frees);
 	new_arr(d, frees);
 	v = (t_lis_v){0, -1, 1};
 	while (++v.i < d->size)
@@ -84,7 +89,5 @@ t_deque	*lis_get(t_deque *d, t_frees *frees)
 			}
 		}
 	}
-	free(frees->arr);
-	free(frees->dp);
-	return (make_lis(v, frees));
+	new_lis(v, frees);
 }

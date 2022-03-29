@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/29 18:43:36 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/01 16:09:16 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,29 +113,28 @@ t_node_data	deque_pop(t_deque *d, t_e_deque where, t_frees *frees)
 */
 void	frees_free(t_frees *frees)
 {
-	t_free_node	*fn_tmp;
-	t_deque		*d;
-	t_node		*n;
-	t_node		*n_tmp;
+	t_deque_v	v;
 
 	while (frees->free_n.next)
 	{
-		d = frees->free_n.next->data;
-		n = d->head.next;
-		while (n && n != &d->tail)
+		v.d = frees->free_n.next->data;
+		v.n = v.d->head.next;
+		while (v.n && v.n != &v.d->tail)
 		{
-			n_tmp = n->next;
-			free(n);
-			n = n_tmp;
+			v.n_tmp = v.n->next;
+			free(v.n);
+			v.n = v.n_tmp;
 		}
-		fn_tmp = frees->free_n.next->next;
+		v.fn_tmp = frees->free_n.next->next;
 		free(frees->free_n.next);
-		frees->free_n.next = fn_tmp;
+		frees->free_n.next = v.fn_tmp;
 	}
 	if (frees->arr)
 		free(frees->arr);
 	if (frees->dp)
 		free(frees->dp);
+	if (frees->lis)
+		free(frees->lis);
 }
 
 // 이 함수 체크용이라 지워야 함
@@ -146,8 +145,8 @@ void	deque_print(t_deque *d)
 	int		cnt = 0;
 
 	printf("d : %p\n", d);
-	// printf("head : %p, data : %d, before : %p, next : %p\n", &d->head, d->head.data, d->head.before, d->head.next);
-	// printf("tail : %p, data : %d, before : %p, next : %p\n", &d->tail, d->tail.data, d->tail.before, d->tail.next);
+	printf("head : %p, data : %d, before : %p, next : %p\n", &d->head, d->head.data, d->head.before, d->head.next);
+	printf("tail : %p, data : %d, before : %p, next : %p\n", &d->tail, d->tail.data, d->tail.before, d->tail.next);
 	while (n && n != &d->tail)
 	{
 		printf("cnt : %d, node : %p, data : %d, before : %p, next : %p\n", cnt, n, n->data, n->before, n->next);

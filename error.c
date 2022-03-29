@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:13:02 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/29 16:06:49 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/03/31 14:53:39 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,4 @@ void	free_n_error_print_exit(t_frees *frees, const char *err_str)
 {
 	frees_free(frees);
 	error_print_exit(err_str);
-}
-
-void	check_dup_exit(t_deque *a, t_frees *frees)
-{
-	t_node	*y;
-	t_node	*x;
-
-	y = a->head.next;
-	while (y != &a->tail)
-	{
-		x = y->next;
-		while (x != &a->tail)
-		{
-			if (y->data == x->data)
-				free_n_error_print_exit(frees, "Error\n");
-			x = x->next;
-		}
-		y = y->next;
-	}
 }
