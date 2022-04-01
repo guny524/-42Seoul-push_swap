@@ -1,5 +1,0 @@
-b sort.c:56
-target stop-hook add --one-liner "p b->size"
-target stop-hook add --one-liner "p b->head.next->data"
-target stop-hook add --one-liner "p b->head.next->next->data"
-r

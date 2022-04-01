@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/01 16:18:48 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/02 18:17:53 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PUSH_SWAP_H
 
 # include <stddef.h>
+
+#define DEBUG 0
 
 typedef int	t_node_data;
 
@@ -129,14 +131,21 @@ void			lis(t_deque *d, t_frees *frees);
 */
 typedef struct s_sort_v
 {
-	t_node_data	chunk;
-	t_node_data	inst_cnt;
-	size_t		lis_i;
+	t_node_data	max_b;
+	size_t		ra;
+	size_t		rra;
+	size_t		rb;
+	size_t		rrb;
 }	t_sort_v;
 
-t_node_data		get_chunk(size_t size);
+// t_node_data		get_chunk(size_t size);
+int				is_in_lis(t_node_data data, t_frees *frees);
+void			find_not_lis(t_deque *a, size_t *r, size_t *rr, t_frees *frees);
 void			a_to_b(t_deque *a, t_deque *b, t_frees *frees);
+
+t_node_data		find_max(t_deque *d, size_t *r, size_t *rr);
 void			b_to_a(t_deque *a, t_deque *b, t_frees *frees);
+void			find_insert(t_deque *d, t_node_data data, size_t *r, size_t *rr);
 /*
 * instructions.c
 */
