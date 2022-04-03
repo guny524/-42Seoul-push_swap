@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 19:16:01 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 13:53:06 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stddef.h>
 
-#define DEBUG 0
+// #define DEBUG
 
 /*
 * deque.c
@@ -64,14 +64,6 @@ void			deque_print(t_deque *d);
 /*
 * main.c
 */
-typedef enum e_method
-{
-	METHOD_LIS,
-	METHOD_CNT,
-}	t_method;
-
-# define METHOD METHOD_LIS
-
 t_ps			init_ps(void);
 /*
 * error.c
@@ -119,34 +111,6 @@ void			new_dp(t_ps *ps);
 void			new_lis(t_data max_dp, t_ps *ps);
 t_data			update_dp(t_ps *ps);
 /*
-* lis_a_to_b.c
-*/
-typedef struct s_rotate
-{
-	size_t	ra;
-	size_t	rra;
-	size_t	rb;
-	size_t	rrb;
-}	t_rotate;
-
-int				is_in_lis(t_data data, t_ps *ps);
-void			find_not_lis(size_t *r, size_t *rr, t_ps *ps);
-void			pull_up(t_e_deque which, size_t r, size_t rr, t_ps *ps);
-void			lis_a_to_b(t_ps *ps);
-/*
-* lis_b_to_a.c
-*/
-t_data			find_max(t_deque *d, size_t *r, size_t *rr);
-void			find_insert(t_deque *d, t_data data, size_t *r, size_t *rr);
-void			pull_up_together(t_rotate *ro, t_ps *ps);
-void			lis_b_to_a(t_ps *ps);
-/*
-* cnt_a_to_b.c
-*/
-t_data			get_chunk(size_t size);
-void			cnt_a_to_b(t_ps *ps);
-void			cnt_b_to_a(t_ps *ps);
-/*
 * instructions.c
 */
 typedef enum e_inst
@@ -169,5 +133,36 @@ void			inst_push(t_deque *d, t_node *node, t_e_deque where, t_ps *ps);
 void			inst_swap(t_deque *d, t_ps *ps);
 void			inst_run(t_e_inst inst, t_ps *ps);
 void			inst_run_print(t_e_inst inst, t_ps *ps);
+/*
+* sort_a_to_b.c
+*/
+typedef struct s_rotate
+{
+	size_t	ra;
+	size_t	rra;
+	size_t	rb;
+	size_t	rrb;
+	size_t	rr;
+	size_t	rrr;
+}	t_rotate;
+
+int				is_in_lis(t_data data, t_ps *ps);
+void			find_not_lis(size_t *r, size_t *rr, t_ps *ps);
+void			mul_inst_run_print(t_e_inst inst, size_t cnt, t_ps *ps);
+void			sort_a_to_b(t_ps *ps);
+/*
+* sort_b_to_a.c
+*/
+t_data			find_max(t_deque *d, size_t *r, size_t *rr);
+void			find_insert(t_deque *d, t_data data, size_t *r, size_t *rr);
+void			run_low_cost(t_ps *ps);
+void			sort_b_to_a(t_ps *ps);
+/*
+* sort_min.c
+*/
+size_t			ft_min(size_t a, size_t b);
+size_t			ft_max(size_t a, size_t b);
+t_rotate		update_rr_rrr(t_rotate ro, t_e_inst inst);
+t_rotate		update_fourway_min(t_rotate ro);
 
 #endif

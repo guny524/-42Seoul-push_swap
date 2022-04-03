@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lis_b_to_a.c                                       :+:      :+:    :+:   */
+/*   sort_b_to_a.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:30 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 19:15:56 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 12:43:06 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <limits.h>
 #include "push_swap.h"
 
-#include <stdio.h> //#
+#ifdef DEBUG
+#include <stdio.h>
+#endif
 
 /*
 * Find the maximum value in deque d,
@@ -68,32 +71,64 @@ void	find_insert(t_deque *d, t_data data, size_t *r, size_t *rr)
 		n = n->next;
 		++cnt;
 	}
-	//# b에 제일 큰 값이 있을 때 여기까지 진행
+	//# data가 a에 있는 값보다 젤 크거나, 작을 때 여기까지 진행
 	find_max(d, r, rr);
-	if (DEBUG)
+	#ifdef DEBUG
 		printf("find max in find insert\n");
-	if (DEBUG)
-		printf("ra : %ld, rra : %ld\n", *r, *rr); //#
+		printf("ra : %ld, rra : %ld\n", *r, *rr);
+	#endif
 	*r += 1;
 	*rr -= 1;
+	#ifdef DEBUG
+		printf("ra : %ld, rra : %ld\n", *r, *rr);
+	#endif
 }
 
-void	pull_up_together(t_rotate *ro, t_ps *ps)
+void	run_low_cost(t_ps *ps)
 {
-	if (ro->ra <= ro->rra && ro->rb <= ro->rrb)
-		while (ro->ra && ro->rb)
-		{
-			inst_run_print(INST_RR, ps);
-			--ro->ra;
-			--ro->rb;
-		}
-	else if (ro->ra > ro->rra && ro->rb > ro->rrb)
-		while (ro->rra && ro->rrb)
-		{
-			inst_run_print(INST_RRR, ps);
-			--ro->rra;
-			--ro->rrb;
-		}
+	t_node		*n;
+	t_rotate	ro;
+	t_rotate	min;
+	t_rotate	tmp;
+
+	n = ps->b->head.next;
+	ro = (t_rotate){0, 0, 0, ps->b->size, 0, 0};
+	if (1 == ps->b->size)
+		ro.rrb = 0;
+	find_insert(ps->a, n->data, &ro.ra, &ro.rra);
+	min = update_fourway_min(ro);
+	while (n != &ps->b->tail)
+	{
+		find_insert(ps->a, n->data, &ro.ra, &ro.rra);
+		#ifdef DEBUG
+			printf("find low cost value : %d\n", n->data);
+			printf("find low cost ra : %ld, rra : %ld\n", ro.ra, ro.rra);
+			printf("find low cost rb : %ld, rrb : %ld\n", ro.rb, ro.rrb);
+		#endif
+		tmp = update_fourway_min(ro);
+		#ifdef DEBUG
+			printf("update tmp ra : %ld, rra : %ld\n", tmp.ra, tmp.rra);
+			printf("update tmp rb : %ld, rrb : %ld\n", tmp.rb, tmp.rrb);
+			printf("update tmp rr : %ld, rrr : %ld\n", tmp.rr, tmp.rrr);
+		#endif
+		if (min.ra + min.rb + min.rra + min.rrb + min.rr + min.rrr
+			> tmp.ra + tmp.rb + tmp.rra + tmp.rrb + tmp.rr + tmp.rrr)
+			min = tmp;
+		#ifdef DEBUG
+			printf("min ra : %ld, rra : %ld\n", min.ra, min.rra);
+			printf("min rb : %ld, rrb : %ld\n", min.rb, min.rrb);
+			printf("min rr : %ld, rrr : %ld\n", min.rr, min.rrr);
+		#endif
+		n = n->next;
+		ro.rb++;
+		ro.rrb--;
+	}
+	mul_inst_run_print(INST_RR, min.rr, ps);
+	mul_inst_run_print(INST_RRR, min.rrr, ps);
+	mul_inst_run_print(INST_RA, min.ra, ps);
+	mul_inst_run_print(INST_RRA, min.rra, ps);
+	mul_inst_run_print(INST_RB, min.rb, ps);
+	mul_inst_run_print(INST_RRB, min.rrb, ps);
 }
 
 /*
@@ -106,32 +141,21 @@ void	pull_up_together(t_rotate *ro, t_ps *ps)
 * @param[in] frees necessary to use the found lis value,
 * and to free the malloced deques, and lis.
 */
-void	lis_b_to_a(t_ps *ps)
+void	sort_b_to_a(t_ps *ps)
 {
-	t_rotate	ro;
-	t_data		max_b;
+	size_t	ra;
+	size_t	rra;
 
 	while (ps->b->size != 0)
 	{
-		max_b = find_max(ps->b, &ro.rb, &ro.rrb);
-		if (DEBUG) //#
-			printf("max_b : %d\n", max_b); //#
-		if (DEBUG) //#
-			printf("rb : %ld, rrb : %ld\n", ro.rb, ro.rrb); //#
-		find_insert(ps->a, max_b, &ro.ra, &ro.rra);
-		if (DEBUG) //#
-			printf("ra : %ld, rra : %ld\n", ro.ra, ro.rra); //#
-		pull_up_together(&ro, ps);
-		if (DEBUG) //#
-			printf("after rr, rrr ra : %ld, rra : %ld\n", ro.ra, ro.rra); //#
-		if (DEBUG) //#
-			printf("after rr, rrr rb : %ld, rrb : %ld\n", ro.rb, ro.rrb); //#
-		pull_up(DEQUE_A, ro.ra, ro.rra, ps);
-		pull_up(DEQUE_B, ro.rb, ro.rrb, ps);
+		run_low_cost(ps);
 		inst_run_print(INST_PA, ps);
 	}
-	find_max(ps->a, &ro.ra, &ro.rra);
-	ro.ra += 1;
-	ro.rra -= 1;
-	pull_up(DEQUE_A, ro.ra, ro.rra, ps);
+	find_max(ps->a, &ra, &rra);
+	ra += 1;
+	rra -= 1;
+	if (ra <= rra)
+		mul_inst_run_print(INST_RA, ra, ps);
+	else
+		mul_inst_run_print(INST_RRA, rra, ps);
 }
