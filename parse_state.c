@@ -6,100 +6,100 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/29 16:06:20 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/03 16:45:24 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_e_state_parse	state_parse_space(char s, t_state_data *data)
+t_e_state_parse	state_parse_space(char s, t_parse_num *num)
 {
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
 		return (STATE_PARSE_SPACE);
 	else if ('0' <= s && s <= '9')
 	{
-		data->num = data->num * 10 + s - '0';
+		num->data = num->data * 10 + s - '0';
 		return (STATE_PARSE_NUM);
 	}
 	else if ('+' == s || '-' == s)
 	{
 		if ('-' == s)
-			data->sign = -1;
+			num->sign = -1;
 		return (STATE_PARSE_SIGN);
 	}
 	else
 		return (STATE_PARSE_ERROR);
 }
 
-t_e_state_parse	state_parse_sign(char s, t_state_data *data)
+t_e_state_parse	state_parse_sign(char s, t_parse_num *num)
 {
 	if ('0' <= s && s <= '9')
 	{
-		data->num = data->num * 10 + data->sign * (s - '0');
+		num->data = num->data * 10 + num->sign * (s - '0');
 		return (STATE_PARSE_NUM);
 	}
 	else
 		return (STATE_PARSE_ERROR);
 }
 
-t_e_state_parse	state_parse_num(char s, t_state_data *data, t_deque *a,
-					t_frees *frees)
+t_e_state_parse	state_parse_num(char s, t_parse_num *num, t_ps *ps)
 {
-	t_node_data	tmp;
+	t_data	tmp;
 
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
 	{
-		deque_push(a, data->num, DEQUE_TAIL, frees);
-		*data = (t_state_data){1, 0};
+		deque_push(ps->a, num->data, DEQUE_TAIL, ps);
+		*num = (t_parse_num){1, 0};
 		return (STATE_PARSE_SPACE);
 	}
 	else if ('0' <= s && s <= '9')
 	{
-		tmp = data->num * 10 + data->sign * (s - '0');
-		if ((-1 == data->sign && tmp > data->num)
-			|| (1 == data->sign && tmp < data->num))
+		tmp = num->data * 10 + num->sign * (s - '0');
+		if ((-1 == num->sign && tmp > num->data)
+			|| (1 == num->sign && tmp < num->data))
 			return (STATE_PARSE_ERROR);
-		data->num = tmp;
+		num->data = tmp;
 		return (STATE_PARSE_NUM);
 	}
 	else
 		return (STATE_PARSE_ERROR);
 }
 
-void	check_finish(t_e_state_parse state, t_node_data n, t_deque *a,
-			t_frees *frees)
+void	check_finish(t_e_state_parse state, t_data num, t_ps *ps)
 {
 	if (STATE_PARSE_ERROR == state || STATE_PARSE_SIGN == state)
-		free_n_error_print_exit(frees, "Error\n");
+		free_ps_error_print_exit(ps, "Error\n");
 	else if (STATE_PARSE_NUM == state)
-		deque_push(a, n, DEQUE_TAIL, frees);
+		deque_push(ps->a, num, DEQUE_TAIL, ps);
 }
 
-void	parse_arg(char *argv[], t_deque *a, t_frees *frees)
+void	parse_arg(char *argv[], int argc, t_ps *ps)
 {
+	int				cnt;
 	char			*str;
 	t_e_state_parse	state;
-	t_state_data	data;
+	t_parse_num		num;
 
-	while (*argv)
+	cnt = 0;
+	while (++cnt < argc)
 	{
-		str = *argv++;
-		data = (t_state_data){1, 0};
+		str = argv[cnt];
+		num = (t_parse_num){1, 0};
 		state = STATE_PARSE_SPACE;
 		while (*str)
 		{
 			if (STATE_PARSE_ERROR == state)
-				free_n_error_print_exit(frees, "Error\n");
+				free_ps_error_print_exit(ps, "Error\n");
 			else if (STATE_PARSE_SPACE == state)
-				state = state_parse_space(*str, &data);
+				state = state_parse_space(*str, &num);
 			else if (STATE_PARSE_SIGN == state)
-				state = state_parse_sign(*str, &data);
+				state = state_parse_sign(*str, &num);
 			else if (STATE_PARSE_NUM == state)
-				state = state_parse_num(*str, &data, a, frees);
+				state = state_parse_num(*str, &num, ps);
 			str++;
 		}
-		check_finish(state, data.num, a, frees);
+		check_finish(state, num.data, ps);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:13:02 by min-jo            #+#    #+#             */
-/*   Updated: 2022/03/31 14:53:39 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/03 15:01:15 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,27 @@ void	error_print_exit(const char *err_str)
 	exit(EXIT_FAILURE);
 }
 
-void	free_n_error_print_exit(t_frees *frees, const char *err_str)
+/*
+* 댕글링 포인터를 방지하기 위해서 free하고 바로 exit해야 함
+* 아니면 ps를 전부 free하는게 아니고, 일부분만 free하는 다른 함수에서는
+* 꼭 free하고 NULL을 넣어줘야함
+*/
+void	free_ps(t_ps *ps)
 {
-	frees_free(frees);
+	if (ps->a)
+		free_deque(ps->a);
+	if (ps->b)
+		free_deque(ps->b);
+	if (ps->arr)
+		free(ps->arr);
+	if (ps->dp)
+		free(ps->dp);
+	if (ps->lis)
+		free(ps->lis);
+}
+
+void	free_ps_error_print_exit(t_ps *ps, const char *err_str)
+{
+	free_ps(ps);
 	error_print_exit(err_str);
 }

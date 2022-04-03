@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/01 16:09:16 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/03 18:52:10 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,67 @@
 #include <sysexits.h>
 #include "push_swap.h"
 
-t_node	*new_node(t_node_data data, t_frees *frees)
+/*
+* Malloc new node for deque.
+*
+* @praram[in] data for node data.
+* @praram[in] ps necessary to free malloced deque and other arrays in ps.
+*/
+t_node	*new_node(t_data data, t_ps *ps)
 {
 	t_node	*n;
 
 	n = malloc(sizeof(t_node));
 	if (NULL == n)
-		free_n_error_print_exit(frees, "node malloc fail\n");
+		free_ps_error_print_exit(ps, "node malloc fail\n");
 	n->data = data;
 	return (n);
 }
 
-t_deque	*new_deque(t_frees *frees)
+/*
+* Malloc new deque and set a or b in pa point to it.
+*
+* @praram[in] ps necessary to free malloced deque and other arrays in ps,
+* and access to a, b deque.
+* @praram[in] a_or_b indicate which deque to point to malloced deque.
+* DEQUE_A or DEQUE_B.
+*/
+t_deque	*new_deque(t_ps *ps, t_e_deque a_or_b)
 {
-	t_free_node	*fn;
 	t_deque		*d;
 
-	fn = malloc(sizeof(t_free_node));
-	if (NULL == fn)
-		free_n_error_print_exit(frees, "free node malloc fail\n");
 	d = malloc(sizeof(t_deque));
 	if (NULL == d)
-	{
-		free(fn);
-		free_n_error_print_exit(frees, "deque malloc fail\n");
-	}
+		free_ps_error_print_exit(ps, "deque malloc fail\n");
 	d->head.before = NULL;
 	d->head.next = &d->tail;
 	d->tail.before = &d->head;
 	d->tail.next = NULL;
 	d->size = 0;
-	fn->data = d;
-	fn->next = NULL;
-	frees->free_n.next = fn;
+	if (DEQUE_A == a_or_b)
+		ps->a = d;
+	else if (DEQUE_B == a_or_b)
+		ps->b = d;
+	else
+		free_ps_error_print_exit(ps, "none a or b ether\n");
 	return (d);
 }
 
-void	deque_push(t_deque *d, t_node_data data, t_e_deque where,
-			t_frees *frees)
+/*
+* Push data in deque.
+*
+* @praram[in] d the deque which node will be inserted into.
+* @praram[in] data the value that node will contain.
+* @praram[in] where to insert node in deque. DEQUE_HEAD or DEQUE_TAIL.
+* @praram[in] ps necessary to free malloced deque and other arrays in ps.
+*/
+void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps)
 {
 	t_node	*node;
 
 	if (!d)
-		free_n_error_print_exit(frees, "deque pointer NULL but push\n");
-	node = new_node(data, frees);
+		free_ps_error_print_exit(ps, "deque pointer NULL but push\n");
+	node = new_node(data, ps);
 	if (DEQUE_HEAD == where)
 	{
 		node->before = &d->head;
@@ -73,68 +90,57 @@ void	deque_push(t_deque *d, t_node_data data, t_e_deque where,
 		d->tail.before->next = node;
 		d->tail.before = node;
 	}
+	else
+		free_ps_error_print_exit(ps, "none head or tail ether\n");
 	d->size++;
 }
 
 /*
 * 항상 pop 하기 전에 0 == d->size 인지 체크해야 함
 */
-t_node_data	deque_pop(t_deque *d, t_e_deque where, t_frees *frees)
+t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
 {
-	t_node		*n;
-	t_node_data	ret;
+	t_node	*n;
+	t_data	ret;
 
 	if (!d)
-		free_n_error_print_exit(frees, "deque pointer NULL but pop\n");
+		free_ps_error_print_exit(ps, "deque pointer NULL but pop\n");
 	if (0 == d->size)
-		free_n_error_print_exit(frees, "deque size 0 but pop\n");
+		free_ps_error_print_exit(ps, "deque size 0 but pop\n");
+	n = NULL;
 	if (DEQUE_HEAD == where)
 	{
 		n = d->head.next;
 		d->head.next = n->next;
 		n->next->before = &d->head;
 	}
-	else
+	else if (DEQUE_TAIL == where)
 	{
 		n = d->tail.before;
 		d->tail.before = n->before;
 		n->before->next = &d->tail;
 	}
+	else
+		free_ps_error_print_exit(ps, "none head or tail ether\n");
 	ret = n->data;
 	free(n);
 	d->size--;
 	return (ret);
 }
 
-/*
-* 항상 free 하고 바로 exit 해야 함
-* free 하고 바로 exit 하면 굳이 더블포인터 써서 댕글링 포인터 방지 안해도 됨
-* 그러니까 frees_free 하고 바로 exit 안 하는 경우 생기면 신경쓰자
-*/
-void	frees_free(t_frees *frees)
+void	free_deque(t_deque *d)
 {
-	t_deque_v	v;
+	t_node	*n;
+	t_node	*tmp;
 
-	while (frees->free_n.next)
+	n = d->head.next;
+	while (n != &d->tail)
 	{
-		v.d = frees->free_n.next->data;
-		v.n = v.d->head.next;
-		while (v.n && v.n != &v.d->tail)
-		{
-			v.n_tmp = v.n->next;
-			free(v.n);
-			v.n = v.n_tmp;
-		}
-		v.fn_tmp = frees->free_n.next->next;
-		free(frees->free_n.next);
-		frees->free_n.next = v.fn_tmp;
+		tmp = n;
+		n = n->next;
+		free(tmp);
 	}
-	if (frees->arr)
-		free(frees->arr);
-	if (frees->dp)
-		free(frees->dp);
-	if (frees->lis)
-		free(frees->lis);
+	free(d);
 }
 
 // 이 함수 체크용이라 지워야 함

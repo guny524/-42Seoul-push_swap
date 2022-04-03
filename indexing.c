@@ -6,19 +6,19 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 21:34:35 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/01 15:37:24 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/03 15:26:29 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "push_swap.h"
 
-size_t	partition(t_node_data *arr, size_t left, size_t right)
+size_t	partition(t_data *arr, size_t left, size_t right)
 {
-	t_node_data	pivot;
+	t_data	pivot;
 	size_t		low;
 	size_t		high;
-	t_node_data	tmp;
+	t_data	tmp;
 
 	pivot = arr[left];
 	low = left;
@@ -41,7 +41,7 @@ size_t	partition(t_node_data *arr, size_t left, size_t right)
 	return (low);
 }
 
-void	quick_sort(t_node_data *arr, size_t left, size_t right)
+void	quick_sort(t_data *arr, size_t left, size_t right)
 {
 	size_t	pivot_index;
 
@@ -54,7 +54,7 @@ void	quick_sort(t_node_data *arr, size_t left, size_t right)
 		quick_sort(arr, pivot_index + 1, right);
 }
 
-int	is_unique(t_node_data *arr, size_t size)
+int	is_unique(t_data *arr, size_t size)
 {
 	size_t	i;
 
@@ -65,11 +65,11 @@ int	is_unique(t_node_data *arr, size_t size)
 	return (1);
 }
 
-size_t	binary_search(t_node_data *arr, t_node_data data, size_t low,
+size_t	binary_search(t_data *arr, t_data data, size_t low,
 			size_t high)
 {
 	size_t		mid;
-	t_node_data	item;
+	t_data	item;
 
 	if (high < low)
 		return (0);
@@ -82,18 +82,16 @@ size_t	binary_search(t_node_data *arr, t_node_data data, size_t low,
 	return (mid);
 }
 
-void	indexing(t_deque *d, t_frees *frees)
+void	indexing(t_ps *ps)
 {
 	t_node		*n;
 	size_t		ret;
 
-	n = d->head.next;
-	while (n != &d->tail)
+	n = ps->a->head.next;
+	while (n != &ps->a->tail)
 	{
-		ret = binary_search(frees->arr, n->data, 0, d->size - 1);
-		n->data = (t_node_data)ret;
+		ret = binary_search(ps->arr, n->data, 0, ps->a->size - 1);
+		n->data = (t_data)ret;
 		n = n->next;
 	}
-	free(frees->arr);
-	frees->arr = NULL;
 }
