@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:08:54 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 15:51:49 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/05 16:36:58 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,15 @@
 #include "error.h"
 
 /*
-* 항상 pop 하기 전에 0 == d->size 인지 체크해야 함
+* Run pop instruction.
+* Different from deque_pop, inst_pop doesn't free malloced node.
+* Just changing the existing node's pointer to use later on inst_push.
+* and return poped node's address
+* !!Always!! should check if d->size is 0 before pop.
+*
+* @praram[out] d is the deque which node will be pushed into.
+* @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
 t_node	*inst_pop(t_deque *d, t_e_deque where, t_ps *ps)
 {
@@ -45,6 +53,16 @@ t_node	*inst_pop(t_deque *d, t_e_deque where, t_ps *ps)
 	return (node);
 }
 
+/*
+* Run push instruction.
+* Different from deque_push, inst_push doesn't malloc new node.
+* Just changing the existing poped out node's pointer.
+*
+* @praram[out] d is the deque which node will be pushed into.
+* @praram[out] node is the node's address that will pushed into.
+* @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+*/
 void	inst_push(t_deque *d, t_node *node, t_e_deque where, t_ps *ps)
 {
 	if (DEQUE_HEAD == where)
@@ -66,6 +84,13 @@ void	inst_push(t_deque *d, t_node *node, t_e_deque where, t_ps *ps)
 	d->size++;
 }
 
+/*
+* Run swap instruction.
+* Switch the two element top of the deque.
+*
+* @praram[out] d is the deque which node will be swaped.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+*/
 void	inst_swap(t_deque *d, t_ps *ps)
 {
 	t_node	*first;
@@ -77,6 +102,13 @@ void	inst_swap(t_deque *d, t_ps *ps)
 	inst_push(d, second, DEQUE_HEAD, ps);
 }
 
+/*
+* Just run push_swap instruction not print it.
+* Even if there is no element on deque no error will be occur
+*
+* @praram[in] inst is instruction perform push_swap operation.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+*/
 void	inst_run(t_e_inst inst, t_ps *ps)
 {
 	if (INST_SA == inst || INST_SB == inst || INST_SS == inst)
@@ -106,10 +138,16 @@ void	inst_run(t_e_inst inst, t_ps *ps)
 	}
 }
 
+/*
+* Run push_swap instruction and print it.
+*
+* @praram[in] inst is instruction perform push_swap operation.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+*/
 void	inst_run_print(t_e_inst inst, t_ps *ps)
 {
 	const char	*inst_str[] = {"sa\n", "sb\n", "ss\n", "pa\n", "pb\n",
-								"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"};
+		"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"};
 
 	if (-1 == write(STDOUT_FILENO, inst_str[inst], ft_strlen(inst_str[inst])))
 	{

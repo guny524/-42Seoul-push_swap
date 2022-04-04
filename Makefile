@@ -6,46 +6,53 @@
 #    By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 16:06:51 by min-jo            #+#    #+#              #
-#    Updated: 2022/04/04 16:28:33 by min-jo           ###   ########.fr        #
+#    Updated: 2022/04/05 20:36:17 by min-jo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	push_swap
+BNAME		=	checker
 
 SRC_DIR		=	src/
 SRC_ORI		=	push_swap.c deque.c error.c parse_state.c indexing.c lis.c\
 				instruct.c sort_a_to_b.c sort_b_to_a.c sort_min.c
-BSRC_ORI	=	push_swap_bonus.c
-
-SRC			=	$(addprefix $(SRC_DIR), $(SRC_ORI))
-BSRC		=	$(addprefix $(SRC_DIR), $(BSRC_ORI))
+BSRC_ORI	=
 
 HD_DIR		=	includes/
 
-OBJ			=	$(SRC:.c=.o)
-BOBJ		=	$(BSRC:.c=.o)
-CFLAGS		+=	-Wall -Wextra -Werror
+SRCS			=	$(addprefix $(SRC_DIR), $(SRC_ORI))
+BSRCS		=	$(addprefix $(SRC_DIR), $(BSRC_ORI))
+
+OBJS			=	$(SRCS:.c=.o)
+BOBJS		=	$(BSRCS:.c=.o)
+
+CFLAGS		+=	-Wall -Wextra -Werror -MD
 CPPFLAGS	+=	-I $(HD_DIR)
+# LDFALGS		+=	-lm
 
 all:		$(NAME)
 
-%.o:		%.c $(addprefix $(HD_DIR), $(%.h))
+%.o:		%.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -c -o $@
 
-$(NAME):	$(OBJ)
+$(NAME):	$(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@
 
-bonus:		$(BOBJ)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $(NAME)
+bonus:		$(BOBJS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $(BNAME)
 	touch bonus
 
 clean:
-	rm -f $(OBJ) bonus
+	rm -f $(OBJS) $(BOBJS)
+	rm -f $(addprefix $(SRC_DIR), *.d)
+	rm -f bonus
 
 fclean:		clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(BNAME)
 
 re:			fclean all
 
 .PHONY:		all clean fclean re bonus
 
+-include $(OBJS:.o=.d)
+-include $(BOBJS:.o=.d)

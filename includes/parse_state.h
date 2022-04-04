@@ -6,15 +6,12 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 15:36:13 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:46:10 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 17:24:08 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_STATE_H
 # define PARSE_STATE_H
-
-typedef enum e_state_parse	t_e_state_parse;
-typedef struct s_parse_num	t_parse_num;
 
 # include "push_swap.h"
 

@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:47:17 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/05 16:56:45 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include "parse_state.h"
 #include "error.h"
 
+/*
+* State for parsing white space. return next state.
+* White space, number and sign char can be followed by after white space char.
+* If encounter number and sign char, update information through num pointer.
+* It is convenient to start with this state,
+* since the string can have whitespace before or after it.
+*
+* @praram[in] s is current char to check.
+* @praram[out] num is the pointer to apply the result to.
+*/
 t_e_state_parse	state_parse_space(char s, t_parse_num *num)
 {
 	if ('\t' == s || '\n' == s || '\v' == s
@@ -34,6 +44,13 @@ t_e_state_parse	state_parse_space(char s, t_parse_num *num)
 		return (STATE_PARSE_ERROR);
 }
 
+/*
+* State for parsing sign. return next state.
+* Only the number char can be followed by after sign char.
+*
+* @praram[in] s is current char to check.
+* @praram[out] num is the pointer to apply the result to.
+*/
 t_e_state_parse	state_parse_sign(char s, t_parse_num *num)
 {
 	if ('0' <= s && s <= '9')
@@ -45,6 +62,18 @@ t_e_state_parse	state_parse_sign(char s, t_parse_num *num)
 		return (STATE_PARSE_ERROR);
 }
 
+/*
+* State for parsing number. return next state.
+* White space and number char can be followed by after number char.
+* If encounter white space, it means the number parsing is over,
+* so the number is pushed to deque A and initialized.
+* Keep check the number is overflowed.
+*
+* @praram[in] s is current char to check.
+* @praram[out] num is the pointer to apply the result to.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
+*/
 t_e_state_parse	state_parse_num(char s, t_parse_num *num, t_ps *ps)
 {
 	t_data	tmp;
@@ -69,6 +98,18 @@ t_e_state_parse	state_parse_num(char s, t_parse_num *num, t_ps *ps)
 		return (STATE_PARSE_ERROR);
 }
 
+/*
+* Check the finished state.
+* Should check last state is reasonable,
+* cause while loop in parse_arg function check Null char,
+* it can finish do nothing.
+* It is not reasonable, if not finished with STATE_PARSE_SPACE.
+*
+* @praram[in] state is finished state.
+* @praram[in] num is the information steel updated.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
+*/
 void	check_finish(t_e_state_parse state, t_data num, t_ps *ps)
 {
 	if (STATE_PARSE_ERROR == state || STATE_PARSE_SIGN == state)
@@ -77,6 +118,16 @@ void	check_finish(t_e_state_parse state, t_data num, t_ps *ps)
 		deque_push(ps->a, num, DEQUE_TAIL, ps);
 }
 
+/*
+* Parse number using state machine mechanism
+* and push it to deque A from arguments string.
+* Able to deal with to that situation. ./push_swap 1 2 "3 4"
+*
+* @praram[in] argv is array of arguments string pointer.
+* @praram[in] argc is count of argv array.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
+*/
 void	parse_arg(char *argv[], int argc, t_ps *ps)
 {
 	int				cnt;

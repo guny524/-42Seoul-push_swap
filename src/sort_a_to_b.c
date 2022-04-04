@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:07 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:00:51 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/05 20:37:08 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 #include "debug.h"
 
 /*
-* Check if data is in lis
+* Check if data exist in lis array.
+* Perform O(n)
 *
-* @praram[in] data the value to check
-* @praram[in] frees necessary to use the found lis value.
+* @param[in] data is the value to find in lis array.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
 */
 int	is_in_lis(t_data data, t_ps *ps)
 {
@@ -34,13 +36,15 @@ int	is_in_lis(t_data data, t_ps *ps)
 }
 
 /*
-* Find the none lis value in deque d,
+* Find the none lis value in deque A,
 * and calculate the number of r and rr for that value to rise to the top.
 *
-* @param[in] d deque to be searched.
-* @param[out] r cnt for the none lis value in deque d to go to the top.
-* @param[out] rr cnt for the none lis value number in deque d to go to the top.
-* @param[in] frees necessary to use the found lis value.
+* @param[out] r is rorate count for first found none lis value in deque A
+* to go to the top.
+* @param[out] rr is rear rotate count for first found none lis value in deque A
+* to go to the top.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
 */
 void	find_not_lis(size_t *r, size_t *rr, t_ps *ps)
 {
@@ -63,6 +67,14 @@ void	find_not_lis(size_t *r, size_t *rr, t_ps *ps)
 	}
 }
 
+/*
+* Run multiple push_swap instructions.
+*
+* @praram[in] inst to run
+* @praram[in] cnt is the iterate number of instruction.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque A.
+*/
 void	mul_inst_run_print(t_e_inst inst, size_t cnt, t_ps *ps)
 {
 	size_t	i;
@@ -73,10 +85,12 @@ void	mul_inst_run_print(t_e_inst inst, size_t cnt, t_ps *ps)
 }
 
 /*
-* @param[in] a The deque a.
-* @param[in] b The deque b.
-* @param[in] frees necessary to use the found lis value
-* and to free the malloced deques, and lis.
+* Push b from a, which is not in found lis value.
+* Find the inex where not lis value in deque A
+* and compare which is fast between ra, rra.
+*
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to a, b deque.
 */
 void	sort_a_to_b(t_ps *ps)
 {
@@ -87,7 +101,7 @@ void	sort_a_to_b(t_ps *ps)
 	{
 		find_not_lis(&ra, &rra, ps);
 		#ifdef DEBUG
-			printf("ra : %ld, rra : %ld\n", ra, rra);
+		printf("ra : %ld, rra : %ld\n", ra, rra);
 		#endif
 		if (ra <= rra)
 			mul_inst_run_print(INST_RA, ra, ps);

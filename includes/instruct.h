@@ -6,14 +6,12 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 15:48:23 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:45:26 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:54:45 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INSTRUCT_H
 # define INSTRUCT_H
-
-typedef enum e_inst	t_e_inst;
 
 # include "push_swap.h"
 # include "deque.h"

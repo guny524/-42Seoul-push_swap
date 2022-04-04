@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 15:39:52 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 21:22:25 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 #include "debug.h"
 
 /*
-* Malloc new node for deque.
+* Malloc new node for deque and return it.
 *
 * @praram[in] data for node data.
-* @praram[in] ps necessary to free malloced deque and other arrays in ps.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
 t_node	*new_node(t_data data, t_ps *ps)
 {
@@ -34,14 +34,14 @@ t_node	*new_node(t_data data, t_ps *ps)
 }
 
 /*
-* Malloc new deque and set a or b in pa point to it.
+* Malloc new deque and set a or b in ps point to it and return it.
 *
-* @praram[in] ps necessary to free malloced deque and other arrays in ps,
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps,
 * and access to a, b deque.
-* @praram[in] a_or_b indicate which deque to point to malloced deque.
+* @praram[in] which indicate which deque to point to malloced deque.
 * DEQUE_A or DEQUE_B.
 */
-t_deque	*new_deque(t_ps *ps, t_e_deque a_or_b)
+t_deque	*new_deque(t_ps *ps, t_e_deque which)
 {
 	t_deque		*d;
 
@@ -53,9 +53,9 @@ t_deque	*new_deque(t_ps *ps, t_e_deque a_or_b)
 	d->tail.before = &d->head;
 	d->tail.next = NULL;
 	d->size = 0;
-	if (DEQUE_A == a_or_b)
+	if (DEQUE_A == which)
 		ps->a = d;
-	else if (DEQUE_B == a_or_b)
+	else if (DEQUE_B == which)
 		ps->b = d;
 	else
 		free_ps_error_print_exit(ps, "none a or b ether\n");
@@ -65,17 +65,15 @@ t_deque	*new_deque(t_ps *ps, t_e_deque a_or_b)
 /*
 * Push data in deque.
 *
-* @praram[in] d the deque which node will be inserted into.
-* @praram[in] data the value that node will contain.
-* @praram[in] where to insert node in deque. DEQUE_HEAD or DEQUE_TAIL.
-* @praram[in] ps necessary to free malloced deque and other arrays in ps.
+* @praram[out] d is the deque which node will be pushed into.
+* @praram[in] data is the value that node will contain.
+* @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
 void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps)
 {
 	t_node	*node;
 
-	if (!d)
-		free_ps_error_print_exit(ps, "deque pointer NULL but push\n");
 	node = new_node(data, ps);
 	if (DEQUE_HEAD == where)
 	{
@@ -97,15 +95,18 @@ void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps)
 }
 
 /*
-* 항상 pop 하기 전에 0 == d->size 인지 체크해야 함
+* Pop data in deque and return it.
+* !!Always!! should check if d->size is 0 before pop.
+*
+* @praram[out] d is the deque which node will be poped out.
+* @praram[in] where from node poped out. DEQUE_HEAD or DEQUE_TAIL.
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
 t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
 {
 	t_node	*n;
 	t_data	ret;
 
-	if (!d)
-		free_ps_error_print_exit(ps, "deque pointer NULL but pop\n");
 	if (0 == d->size)
 		free_ps_error_print_exit(ps, "deque size 0 but pop\n");
 	n = NULL;
@@ -129,6 +130,11 @@ t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
 	return (ret);
 }
 
+/*
+* Free all deque's nodes.
+*
+* @praram[out] d is the deque will be freed.
+*/
 void	free_deque(t_deque *d)
 {
 	t_node	*n;

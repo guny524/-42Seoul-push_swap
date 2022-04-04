@@ -6,14 +6,12 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 15:52:28 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:46:25 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/05 17:17:53 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SORT_H
 # define SORT_H
-
-typedef struct s_rotate	t_rotate;
 
 # include <stddef.h>
 # include "push_swap.h"
@@ -41,7 +39,8 @@ void			sort_a_to_b(t_ps *ps);
 * sort_b_to_a.c
 */
 t_data			find_max(t_deque *d, size_t *r, size_t *rr);
-void			find_insert(t_deque *d, t_data data, size_t *r, size_t *rr);
+void			find_insert(t_deque *a, t_data data, size_t *r, size_t *rr);
+size_t			sum(t_rotate ro);
 void			run_low_cost(t_ps *ps);
 void			sort_b_to_a(t_ps *ps);
 /*

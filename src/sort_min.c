@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 11:16:20 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:03:51 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/05 20:32:31 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include "push_swap.h"
 #include "sort.h"
 
+/*
+* Return smaller value.
+*
+* @param[in] a is the value will be compared.
+* @param[in] b is the value will be compared.
+*/
 size_t	ft_min(size_t a, size_t b)
 {
 	if (a <= b)
@@ -21,6 +27,12 @@ size_t	ft_min(size_t a, size_t b)
 	return (b);
 }
 
+/*
+* Return bigger value.
+*
+* @param[in] a is the value will be compared.
+* @param[in] b is the value will be compared.
+*/
 size_t	ft_max(size_t a, size_t b)
 {
 	if (a <= b)
@@ -28,6 +40,15 @@ size_t	ft_max(size_t a, size_t b)
 	return (a);
 }
 
+/*
+* Optimize push_swap rotate instructions by inst INST_RR or INST_RRR
+* ra, rb -> rr
+* rra, rrb -> rrr
+* and return optimized rotate.
+*
+* @param[in] ro is the set of push_swap rotate instructions.
+* @param[in] inst is the flag indicate rotation instructions is optimized.
+*/
 t_rotate	update_rr_rrr(t_rotate ro, t_e_inst inst)
 {
 	t_rotate	ret;
@@ -52,6 +73,13 @@ t_rotate	update_rr_rrr(t_rotate ro, t_e_inst inst)
 	return (ret);
 }
 
+/*
+* Leave only the smallest number of instructions
+* and delete the rest intstruction. and return it.
+* Optimize push_swap rotate instructions like ra, rb -> rr
+*
+* @param[in] ro is the set of push_swap rotate instructions.
+*/
 t_rotate	update_fourway_min(t_rotate ro)
 {
 	if (ft_max(ro.ra, ro.rb) <= ro.ra + ro.rrb

@@ -6,17 +6,19 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 16:44:04 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 17:31:47 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-typedef struct s_ps	t_ps;
-
 # include <stddef.h>
 # include "deque.h"
+
+typedef int				t_data;
+
+typedef struct s_deque	t_deque;
 
 typedef struct s_ps
 {
