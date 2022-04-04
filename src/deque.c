@@ -6,14 +6,15 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 18:52:10 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:39:52 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
-#include <sysexits.h>
 #include "push_swap.h"
+#include "error.h"
+
+#include "debug.h"
 
 /*
 * Malloc new node for deque.
@@ -143,8 +144,7 @@ void	free_deque(t_deque *d)
 	free(d);
 }
 
-// 이 함수 체크용이라 지워야 함
-#include <stdio.h>
+#ifdef DEBUG
 void	deque_print(t_deque *d)
 {
 	t_node	*n = d->head.next;
@@ -161,3 +161,4 @@ void	deque_print(t_deque *d)
 	}
 	printf("\n");
 }
+#endif

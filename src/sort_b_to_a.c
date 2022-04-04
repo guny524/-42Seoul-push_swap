@@ -6,16 +6,16 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:30 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 12:43:06 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:03:17 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
+#include <stddef.h>
 #include "push_swap.h"
+#include "deque.h"
+#include "sort.h"
 
-#ifdef DEBUG
-#include <stdio.h>
-#endif
+#include "debug.h"
 
 /*
 * Find the maximum value in deque d,

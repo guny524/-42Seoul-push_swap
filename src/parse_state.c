@@ -6,11 +6,13 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 16:45:24 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:47:17 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+#include "parse_state.h"
+#include "error.h"
 
 t_e_state_parse	state_parse_space(char s, t_parse_num *num)
 {

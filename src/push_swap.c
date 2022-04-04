@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:07:49 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 14:26:25 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:30:31 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "push_swap.h"
+#include "deque.h"
+#include "parse_state.h"
+#include "error.h"
+#include "indexing.h"
+#include "lis.h"
+#include "sort.h"
+#include "instruct.h"
 
-#ifdef DEBUG
-#include <stdio.h>
-#endif
+#include "debug.h"
 
 /*
 * Initailize push_swap struct and return it.

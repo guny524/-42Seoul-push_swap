@@ -6,11 +6,13 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 11:16:20 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 12:05:33 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:03:51 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "stddef.h"
 #include "push_swap.h"
+#include "sort.h"
 
 size_t	ft_min(size_t a, size_t b)
 {

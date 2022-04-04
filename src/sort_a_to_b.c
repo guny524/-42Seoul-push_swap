@@ -6,11 +6,15 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:07 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 12:03:52 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:00:51 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include "push_swap.h"
+#include "instruct.h"
+
+#include "debug.h"
 
 /*
 * Check if data is in lis
@@ -74,9 +78,6 @@ void	mul_inst_run_print(t_e_inst inst, size_t cnt, t_ps *ps)
 * @param[in] frees necessary to use the found lis value
 * and to free the malloced deques, and lis.
 */
-#ifdef DEBUG
-#include <stdio.h>
-#endif
 void	sort_a_to_b(t_ps *ps)
 {
 	size_t		ra;

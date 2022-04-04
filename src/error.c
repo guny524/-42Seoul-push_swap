@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:13:02 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 15:01:15 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:34:44 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <sysexits.h>
 #include "push_swap.h"
+#include "deque.h"
 
 size_t	ft_strlen(const char *str)
 {

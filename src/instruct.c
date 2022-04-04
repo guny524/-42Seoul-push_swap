@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:08:54 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 16:33:18 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:51:49 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <sysexits.h>
 #include "push_swap.h"
+#include "instruct.h"
+#include "error.h"
 
 /*
 * 항상 pop 하기 전에 0 == d->size 인지 체크해야 함

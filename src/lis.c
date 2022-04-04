@@ -6,12 +6,13 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 15:05:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/03 16:32:54 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:56:25 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "push_swap.h"
+#include "error.h"
 
 t_data	*new_data(size_t size, t_ps *ps)
 {
