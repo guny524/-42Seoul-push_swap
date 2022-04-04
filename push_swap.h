@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:09:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 13:53:06 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 14:08:15 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void			deque_print(t_deque *d);
 * main.c
 */
 t_ps			init_ps(void);
+void			optimize_small_than_five(t_ps *ps);
 /*
 * error.c
 */

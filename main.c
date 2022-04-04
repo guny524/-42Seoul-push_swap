@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:07:49 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 13:54:20 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/04 14:26:25 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ t_ps	init_ps(void)
 	return (ret);
 }
 
+void	optimize_small_than_five(t_ps *ps)
+{
+	if (ps->a->size - 1 == (size_t)ps->a->head.next->data)
+		inst_run_print(INST_RA, ps);
+	else if (ps->a->size - 1 == (size_t)ps->a->tail.before->before->data)
+		inst_run_print(INST_RRA, ps);
+	if (1 == ps->a->head.next->data - ps->a->head.next->next->data)
+		inst_run_print(INST_SA, ps);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_ps	ps;
@@ -41,7 +51,7 @@ int	main(int argc, char *argv[])
 	ps = init_ps();
 	ps.a = new_deque(&ps, DEQUE_A);
 	parse_arg(argv, argc, &ps);
-	if (ps.a->size == 0)
+	if (ps.a->size <= 1)
 		return (0);
 	#ifdef DEBUG
 		deque_print(ps.a);
@@ -54,6 +64,12 @@ int	main(int argc, char *argv[])
 	free(ps.arr);
 	ps.arr = NULL;
 	#ifdef DEBUG
+		printf("after indexing\n");
+		deque_print(ps.a);
+	#endif
+	optimize_small_than_five(&ps);
+	#ifdef DEBUG
+		printf("after optimize\n");
 		deque_print(ps.a);
 	#endif
 	ps.b = new_deque(&ps, DEQUE_B);
