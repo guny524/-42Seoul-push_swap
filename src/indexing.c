@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   indexing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 21:34:35 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 16:57:54 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/07 09:16:37 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@
 * @praram[in] left start index to find bigger than pivot to right.
 * @praram[in] right start index to find bigger than pivot to left.
 */
-size_t	partition(t_data *arr, size_t left, size_t right)
+size_t	partition(t_deque_data *arr, size_t left, size_t right)
 {
-	t_data	pivot;
-	size_t	low;
-	size_t	high;
-	t_data	tmp;
+	t_deque_data	pivot;
+	size_t			low;
+	size_t			high;
+	t_deque_data	tmp;
 
 	pivot = arr[left];
 	low = left;
@@ -61,7 +61,7 @@ size_t	partition(t_data *arr, size_t left, size_t right)
 * @praram[in] left border for quicksort.
 * @praram[in] right border for quicksort.
 */
-void	quick_sort(t_data *arr, size_t left, size_t right)
+void	quick_sort(t_deque_data *arr, size_t left, size_t right)
 {
 	size_t	pivot_index;
 
@@ -82,7 +82,7 @@ void	quick_sort(t_data *arr, size_t left, size_t right)
 * @praram[in] arr is sorted arr ontaining the values of deque A.
 * @praram[in] size of arr. same as a->size - 1
 */
-int	is_unique(t_data *arr, size_t size)
+int	is_unique(t_deque_data *arr, size_t size)
 {
 	size_t	i;
 
@@ -103,11 +103,11 @@ int	is_unique(t_data *arr, size_t size)
 * @praram[in] low start index doing binary search.
 * @praram[in] high end index doing binary search.
 */
-size_t	binary_search(t_data *arr, t_data data, size_t low,
+size_t	binary_search(t_deque_data *arr, t_deque_data data, size_t low,
 			size_t high)
 {
-	size_t	mid;
-	t_data	item;
+	size_t			mid;
+	t_deque_data	item;
 
 	if (high < low)
 		return (0);
@@ -131,14 +131,14 @@ size_t	binary_search(t_data *arr, t_data data, size_t low,
 */
 void	indexing(t_ps *ps)
 {
-	t_node		*n;
-	size_t		ret;
+	t_deque_node	*n;
+	size_t			ret;
 
 	n = ps->a->head.next;
 	while (n != &ps->a->tail)
 	{
 		ret = binary_search(ps->arr, n->data, 0, ps->a->size - 1);
-		n->data = (t_data)ret;
+		n->data = (t_deque_data)ret;
 		n = n->next;
 	}
 }

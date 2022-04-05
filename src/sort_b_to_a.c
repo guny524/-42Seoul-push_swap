@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:30 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 20:37:52 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:48:33 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 * @param[out] r cnt for the maximum number in deque d to go to the top.
 * @param[out] rr cnt for the maximum number in deque d to go to the top.
 */
-t_data	find_max(t_deque *d, size_t *r, size_t *rr)
+t_deque_data	find_max(t_deque *d, size_t *r, size_t *rr)
 {
-	t_node	*n;
-	t_node	*max;
-	size_t	cnt;
+	t_deque_node	*n;
+	t_deque_node	*max;
+	size_t			cnt;
 
 	n = d->head.next;
 	max = n;
@@ -63,10 +63,10 @@ t_data	find_max(t_deque *d, size_t *r, size_t *rr)
 * @param[out] rr is the count of rear rotate the found index in deque A
 * where the data will be inserted goes to the top.
 */
-void	find_insert(t_deque *a, t_data data, size_t *r, size_t *rr)
+void	find_insert(t_deque *a, t_deque_data data, size_t *r, size_t *rr)
 {
-	t_node	*n;
-	size_t	cnt;
+	t_deque_node	*n;
+	size_t			cnt;
 
 	n = a->head.next;
 	*r = 0;
@@ -117,10 +117,10 @@ size_t	sum(t_rotate ro)
 */
 void	run_low_cost(t_ps *ps)
 {
-	t_node		*n;
-	t_rotate	ro;
-	t_rotate	min;
-	t_rotate	tmp;
+	t_deque_node	*n;
+	t_rotate		ro;
+	t_rotate		min;
+	t_rotate		tmp;
 
 	n = ps->b->head.next;
 	ro = (t_rotate){0, 0, 0, ps->b->size, 0, 0};
@@ -153,12 +153,7 @@ void	run_low_cost(t_ps *ps)
 		ro.rb++;
 		ro.rrb--;
 	}
-	mul_inst_run_print(INST_RR, min.rr, ps);
-	mul_inst_run_print(INST_RRR, min.rrr, ps);
-	mul_inst_run_print(INST_RA, min.ra, ps);
-	mul_inst_run_print(INST_RRA, min.rra, ps);
-	mul_inst_run_print(INST_RB, min.rb, ps);
-	mul_inst_run_print(INST_RRB, min.rrb, ps);
+	run_min_rotate(ps, min);
 }
 
 /*
@@ -177,13 +172,13 @@ void	sort_b_to_a(t_ps *ps)
 	while (ps->b->size != 0)
 	{
 		run_low_cost(ps);
-		inst_run_print(INST_PA, ps);
+		inst_run_print(PS_INST_PA, ps);
 	}
 	find_max(ps->a, &ra, &rra);
 	ra += 1;
 	rra -= 1;
 	if (ra <= rra)
-		mul_inst_run_print(INST_RA, ra, ps);
+		mul_inst_run_print(PS_INST_RA, ra, ps);
 	else
-		mul_inst_run_print(INST_RRA, rra, ps);
+		mul_inst_run_print(PS_INST_RRA, rra, ps);
 }

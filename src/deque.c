@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 21:22:25 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 20:25:39 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@
 * @praram[in] data for node data.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-t_node	*new_node(t_data data, t_ps *ps)
+t_deque_node	*new_deque_node(t_deque_data data, t_ps *ps)
 {
-	t_node	*n;
+	t_deque_node	*n;
 
-	n = malloc(sizeof(t_node));
+	n = malloc(sizeof(t_deque_node));
 	if (NULL == n)
 		free_ps_error_print_exit(ps, "node malloc fail\n");
 	n->data = data;
@@ -70,11 +70,11 @@ t_deque	*new_deque(t_ps *ps, t_e_deque which)
 * @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps)
+void	deque_push(t_deque *d, t_deque_data data, t_e_deque where, t_ps *ps)
 {
-	t_node	*node;
+	t_deque_node	*node;
 
-	node = new_node(data, ps);
+	node = new_deque_node(data, ps);
 	if (DEQUE_HEAD == where)
 	{
 		node->before = &d->head;
@@ -102,10 +102,10 @@ void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps)
 * @praram[in] where from node poped out. DEQUE_HEAD or DEQUE_TAIL.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
+t_deque_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
 {
-	t_node	*n;
-	t_data	ret;
+	t_deque_node	*n;
+	t_deque_data	ret;
 
 	if (0 == d->size)
 		free_ps_error_print_exit(ps, "deque size 0 but pop\n");
@@ -137,8 +137,8 @@ t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps)
 */
 void	free_deque(t_deque *d)
 {
-	t_node	*n;
-	t_node	*tmp;
+	t_deque_node	*n;
+	t_deque_node	*tmp;
 
 	n = d->head.next;
 	while (n != &d->tail)
@@ -153,8 +153,8 @@ void	free_deque(t_deque *d)
 #ifdef DEBUG
 void	deque_print(t_deque *d)
 {
-	t_node	*n = d->head.next;
-	int		cnt = 0;
+	t_deque_node	*n = d->head.next;
+	int				cnt = 0;
 
 	printf("d : %p\n", d);
 	printf("head : %p, data : %d, before : %p, next : %p\n", &d->head, d->head.data, d->head.before, d->head.next);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:51:52 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 16:56:45 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/07 09:25:18 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 * @praram[in] s is current char to check.
 * @praram[out] num is the pointer to apply the result to.
 */
-t_e_state_parse	state_parse_space(char s, t_parse_num *num)
+t_e_state_ps_parse	state_parse_space(char s, t_ps_parse_num *num)
 {
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
@@ -51,7 +51,7 @@ t_e_state_parse	state_parse_space(char s, t_parse_num *num)
 * @praram[in] s is current char to check.
 * @praram[out] num is the pointer to apply the result to.
 */
-t_e_state_parse	state_parse_sign(char s, t_parse_num *num)
+t_e_state_ps_parse	state_parse_sign(char s, t_ps_parse_num *num)
 {
 	if ('0' <= s && s <= '9')
 	{
@@ -74,15 +74,15 @@ t_e_state_parse	state_parse_sign(char s, t_parse_num *num)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to deque A.
 */
-t_e_state_parse	state_parse_num(char s, t_parse_num *num, t_ps *ps)
+t_e_state_ps_parse	state_parse_num(char s, t_ps_parse_num *num, t_ps *ps)
 {
-	t_data	tmp;
+	t_deque_data	tmp;
 
 	if ('\t' == s || '\n' == s || '\v' == s
 		|| '\f' == s || '\r' == s || ' ' == s)
 	{
 		deque_push(ps->a, num->data, DEQUE_TAIL, ps);
-		*num = (t_parse_num){1, 0};
+		*num = (t_ps_parse_num){1, 0};
 		return (STATE_PARSE_SPACE);
 	}
 	else if ('0' <= s && s <= '9')
@@ -110,7 +110,7 @@ t_e_state_parse	state_parse_num(char s, t_parse_num *num, t_ps *ps)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to deque A.
 */
-void	check_finish(t_e_state_parse state, t_data num, t_ps *ps)
+void	check_finish(t_e_state_ps_parse state, t_deque_data num, t_ps *ps)
 {
 	if (STATE_PARSE_ERROR == state || STATE_PARSE_SIGN == state)
 		free_ps_error_print_exit(ps, "Error\n");
@@ -128,18 +128,18 @@ void	check_finish(t_e_state_parse state, t_data num, t_ps *ps)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to deque A.
 */
-void	parse_arg(char *argv[], int argc, t_ps *ps)
+void	ps_parse_arg(char *argv[], int argc, t_ps *ps)
 {
-	int				cnt;
-	char			*str;
-	t_e_state_parse	state;
-	t_parse_num		num;
+	int					cnt;
+	char				*str;
+	t_e_state_ps_parse	state;
+	t_ps_parse_num		num;
 
 	cnt = 0;
 	while (++cnt < argc)
 	{
 		str = argv[cnt];
-		num = (t_parse_num){1, 0};
+		num = (t_ps_parse_num){1, 0};
 		state = STATE_PARSE_SPACE;
 		while (*str)
 		{

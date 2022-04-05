@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lis.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 15:05:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 16:56:21 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/07 09:19:24 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 #include "error.h"
 
 /*
-* Malloc t_data array as much as the size. and return it.
+* Malloc t_deque_data array as much as the size. and return it.
 * If malloc failed, free all data push_swap struct have.
 *
 * @praram[in] size of array.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-t_data	*new_data(size_t size, t_ps *ps)
+t_deque_data	*new_data(size_t size, t_ps *ps)
 {
-	t_data	*ret;
+	t_deque_data	*ret;
 
-	ret = malloc(sizeof(t_data) * size);
+	ret = malloc(sizeof(t_deque_data) * size);
 	if (NULL == ret)
 		free_ps_error_print_exit(ps, "arr malloc fail\n");
 	return (ret);
 }
 
 /*
-* Malloc t_data array as much size of deque A and assign it to ps->arr.
+* Malloc t_deque_data array as much size of deque A and assign it to ps->arr.
 * And assign each value of deque A to arr.
 *
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
@@ -40,8 +40,8 @@ t_data	*new_data(size_t size, t_ps *ps)
 */
 void	new_arr(t_ps *ps)
 {
-	t_node		*n;
-	size_t		i;
+	t_deque_node	*n;
+	size_t			i;
 
 	ps->arr = new_data(ps->a->size, ps);
 	i = 0;
@@ -55,7 +55,7 @@ void	new_arr(t_ps *ps)
 }
 
 /*
-* Malloc t_data array as much size of deque A and assign it to ps->dp.
+* Malloc t_deque_data array as much size of deque A and assign it to ps->dp.
 * And initialize all value of dp to 1.
 *
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
@@ -72,7 +72,7 @@ void	new_dp(t_ps *ps)
 }
 
 /*
-* Malloc t_data array as much as the size of found
+* Malloc t_deque_data array as much as the size of found
 * longest increasing subsequence. and fill it to that value.
 * Start from back of the dp array, using max_dp which is used in finding lis.
 * Set to ps->lis_size size of lis array.
@@ -81,7 +81,7 @@ void	new_dp(t_ps *ps)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to lis array.
 */
-void	new_lis(t_data max_dp, t_ps *ps)
+void	new_lis(t_deque_data max_dp, t_ps *ps)
 {
 	size_t	i;
 
@@ -106,11 +106,11 @@ void	new_lis(t_data max_dp, t_ps *ps)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to arr, dp array.
 */
-t_data	update_dp(t_ps *ps)
+t_deque_data	update_dp(t_ps *ps)
 {
-	size_t	i;
-	size_t	j;
-	t_data	max_dp;
+	size_t			i;
+	size_t			j;
+	t_deque_data	max_dp;
 
 	new_dp(ps);
 	new_arr(ps);

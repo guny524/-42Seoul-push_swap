@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_a_to_b.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:07 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 20:37:08 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/07 09:22:50 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to deque A.
 */
-int	is_in_lis(t_data data, t_ps *ps)
+int	is_in_lis(t_deque_data data, t_ps *ps)
 {
 	size_t	i;
 
@@ -48,8 +48,8 @@ int	is_in_lis(t_data data, t_ps *ps)
 */
 void	find_not_lis(size_t *r, size_t *rr, t_ps *ps)
 {
-	t_node	*n;
-	size_t	cnt;
+	t_deque_node	*n;
+	size_t			cnt;
 
 	n = ps->a->head.next;
 	cnt = 0;
@@ -75,7 +75,7 @@ void	find_not_lis(size_t *r, size_t *rr, t_ps *ps)
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 * and access to deque A.
 */
-void	mul_inst_run_print(t_e_inst inst, size_t cnt, t_ps *ps)
+void	mul_inst_run_print(t_e_ps_inst inst, size_t cnt, t_ps *ps)
 {
 	size_t	i;
 
@@ -104,9 +104,9 @@ void	sort_a_to_b(t_ps *ps)
 		printf("ra : %ld, rra : %ld\n", ra, rra);
 		#endif
 		if (ra <= rra)
-			mul_inst_run_print(INST_RA, ra, ps);
+			mul_inst_run_print(PS_INST_RA, ra, ps);
 		else
-			mul_inst_run_print(INST_RRA, rra, ps);
-		inst_run_print(INST_PB, ps);
+			mul_inst_run_print(PS_INST_RRA, rra, ps);
+		inst_run_print(PS_INST_PB, ps);
 	}
 }

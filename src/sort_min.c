@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 11:16:20 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 20:32:31 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:50:13 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ size_t	ft_max(size_t a, size_t b)
 * @param[in] ro is the set of push_swap rotate instructions.
 * @param[in] inst is the flag indicate rotation instructions is optimized.
 */
-t_rotate	update_rr_rrr(t_rotate ro, t_e_inst inst)
+t_rotate	update_rr_rrr(t_rotate ro, t_e_ps_inst inst)
 {
 	t_rotate	ret;
 
 	ret = (t_rotate){0, 0, 0, 0, 0, 0};
-	if (INST_RR == inst)
+	if (PS_INST_RR == inst)
 	{
 		ret.rr = ft_min(ro.ra, ro.rb);
 		if (ro.ra < ro.rb)
@@ -62,7 +62,7 @@ t_rotate	update_rr_rrr(t_rotate ro, t_e_inst inst)
 		else
 			ret.ra = ro.ra - ro.rb;
 	}
-	else if (INST_RRR == inst)
+	else if (PS_INST_RRR == inst)
 	{
 		ret.rrr = ft_min(ro.rra, ro.rrb);
 		if (ro.rra < ro.rrb)
@@ -85,14 +85,33 @@ t_rotate	update_fourway_min(t_rotate ro)
 	if (ft_max(ro.ra, ro.rb) <= ro.ra + ro.rrb
 		&& ft_max(ro.ra, ro.rb) <= ro.rra + ro.rb
 		&& ft_max(ro.ra, ro.rb) <= ft_max(ro.rra, ro.rrb))
-		return (update_rr_rrr(ro, INST_RR));
+		return (update_rr_rrr(ro, PS_INST_RR));
 	else if (ft_max(ro.rra, ro.rrb) <= ft_max(ro.ra, ro.rb)
 		&& ft_max(ro.rra, ro.rrb) <= ro.ra + ro.rrb
 		&& ft_max(ro.rra, ro.rrb) <= ro.rra + ro.rb)
-		return (update_rr_rrr(ro, INST_RRR));
+		return (update_rr_rrr(ro, PS_INST_RRR));
 	else if (ro.ra + ro.rrb <= ft_max(ro.ra, ro.rb)
 		&& ro.ra + ro.rrb <= ro.rra + ro.rb
 		&& ro.ra + ro.rrb <= ft_max(ro.rra, ro.rrb))
 		return ((t_rotate){ro.ra, 0, 0, ro.rrb, 0, 0});
 	return ((t_rotate){0, ro.rra, ro.rb, 0, 0, 0});
+}
+
+/*
+* Find the low costed way to push b to a. and run it.
+* Cause the while condition is only check deque B's size,
+* should sort rest in deque A at last.
+*
+* @praram[out] ps is necessary to free malloced deque and other arrays in ps.
+* and access to deque a, b.
+* @praram[in] min is the minimized rotate instructions.
+*/
+void	run_min_rotate(t_ps	*ps, t_rotate min)
+{
+	mul_inst_run_print(PS_INST_RR, min.rr, ps);
+	mul_inst_run_print(PS_INST_RRR, min.rrr, ps);
+	mul_inst_run_print(PS_INST_RA, min.ra, ps);
+	mul_inst_run_print(PS_INST_RRA, min.rra, ps);
+	mul_inst_run_print(PS_INST_RB, min.rb, ps);
+	mul_inst_run_print(PS_INST_RRB, min.rrb, ps);
 }

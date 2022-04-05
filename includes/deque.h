@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 15:22:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/04 17:56:34 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:32:03 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,22 @@
 # include "push_swap.h"
 # include "debug.h"
 
-typedef int			t_data;
+/*
+* check forward declaration in push_swap.h
+*/
+typedef int			t_deque_data;
 
-typedef struct s_node
+typedef struct s_deuqe_node
 {
-	t_data			data;
-	struct s_node	*next;
-	struct s_node	*before;
-}	t_node;
+	t_deque_data		data;
+	struct s_deuqe_node	*next;
+	struct s_deuqe_node	*before;
+}	t_deque_node;
 
 typedef struct s_deque
 {
-	struct s_node	head;
-	struct s_node	tail;
+	t_deque_node	head;
+	t_deque_node	tail;
 	size_t			size;
 }	t_deque;
 
@@ -46,15 +49,16 @@ typedef struct s_ps	t_ps;
 /*
 * deque.c
 */
-t_node	*new_node(t_data data, t_ps *ps);
-t_deque	*new_deque(t_ps *ps, t_e_deque which);
-void	deque_push(t_deque *d, t_data data, t_e_deque where, t_ps *ps);
-t_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps);
-void	free_deque(t_deque *d);
+t_deque_node	*new_deque_node(t_deque_data data, t_ps *ps);
+t_deque			*new_deque(t_ps *ps, t_e_deque which);
+void			deque_push(t_deque *d, t_deque_data data, t_e_deque where,
+					t_ps *ps);
+t_deque_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps);
+void			free_deque(t_deque *d);
 
 # ifdef DEBUG
 
-void	deque_print(t_deque *d);
+void			deque_print(t_deque *d);
 
 # endif
 

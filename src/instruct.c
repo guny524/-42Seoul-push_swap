@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:08:54 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/05 16:36:58 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:04:16 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "push_swap.h"
 #include "instruct.h"
 #include "error.h"
+
+#include "debug.h"
 
 /*
 * Run pop instruction.
@@ -28,9 +30,9 @@
 * @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-t_node	*inst_pop(t_deque *d, t_e_deque where, t_ps *ps)
+t_deque_node	*inst_pop(t_deque *d, t_e_deque where, t_ps *ps)
 {
-	t_node		*node;
+	t_deque_node	*node;
 
 	node = NULL;
 	if (DEQUE_HEAD == where)
@@ -63,7 +65,7 @@ t_node	*inst_pop(t_deque *d, t_e_deque where, t_ps *ps)
 * @praram[in] where to push node in deque. DEQUE_HEAD or DEQUE_TAIL.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-void	inst_push(t_deque *d, t_node *node, t_e_deque where, t_ps *ps)
+void	inst_push(t_deque *d, t_deque_node *node, t_e_deque where, t_ps *ps)
 {
 	if (DEQUE_HEAD == where)
 	{
@@ -93,8 +95,8 @@ void	inst_push(t_deque *d, t_node *node, t_e_deque where, t_ps *ps)
 */
 void	inst_swap(t_deque *d, t_ps *ps)
 {
-	t_node	*first;
-	t_node	*second;
+	t_deque_node	*first;
+	t_deque_node	*second;
 
 	first = inst_pop(d, DEQUE_HEAD, ps);
 	second = inst_pop(d, DEQUE_HEAD, ps);
@@ -109,33 +111,39 @@ void	inst_swap(t_deque *d, t_ps *ps)
 * @praram[in] inst is instruction perform push_swap operation.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-void	inst_run(t_e_inst inst, t_ps *ps)
+void	inst_run(t_e_ps_inst inst, t_ps *ps)
 {
-	if (INST_SA == inst || INST_SB == inst || INST_SS == inst)
+	if (PS_INST_SA == inst || PS_INST_SB == inst || PS_INST_SS == inst)
 	{
-		if ((INST_SA == inst || INST_SS == inst) && ps->a->size >= 2)
+		if ((PS_INST_SA == inst || PS_INST_SS == inst) && ps->a->size >= 2)
 			inst_swap(ps->a, ps);
-		if ((INST_SB == inst || INST_SS == inst) && ps->b->size >= 2)
+		if ((PS_INST_SB == inst || PS_INST_SS == inst) && ps->b->size >= 2)
 			inst_swap(ps->b, ps);
 	}
-	else if (INST_PA == inst && ps->b->size >= 1)
+	else if (PS_INST_PA == inst && ps->b->size >= 1)
 		inst_push(ps->a, inst_pop(ps->b, DEQUE_HEAD, ps), DEQUE_HEAD, ps);
-	else if (INST_PB == inst && ps->a->size >= 1)
+	else if (PS_INST_PB == inst && ps->a->size >= 1)
 		inst_push(ps->b, inst_pop(ps->a, DEQUE_HEAD, ps), DEQUE_HEAD, ps);
-	else if (INST_RA == inst || INST_RB == inst || INST_RR == inst)
+	else if (PS_INST_RA == inst || PS_INST_RB == inst || PS_INST_RR == inst)
 	{
-		if ((INST_RA == inst || INST_RR == inst) && ps->a->size >= 1)
+		if ((PS_INST_RA == inst || PS_INST_RR == inst) && ps->a->size >= 1)
 			inst_push(ps->a, inst_pop(ps->a, DEQUE_HEAD, ps), DEQUE_TAIL, ps);
-		if ((INST_RB == inst || INST_RR == inst) && ps->b->size >= 1)
+		if ((PS_INST_RB == inst || PS_INST_RR == inst) && ps->b->size >= 1)
 			inst_push(ps->b, inst_pop(ps->b, DEQUE_HEAD, ps), DEQUE_TAIL, ps);
 	}
-	else if (INST_RRA == inst || INST_RRB == inst || INST_RRR == inst)
+	else if (PS_INST_RRA == inst || PS_INST_RRB == inst || PS_INST_RRR == inst)
 	{
-		if ((INST_RRA == inst || INST_RRR == inst) && ps->a->size >= 1)
+		if ((PS_INST_RRA == inst || PS_INST_RRR == inst) && ps->a->size >= 1)
 			inst_push(ps->a, inst_pop(ps->a, DEQUE_TAIL, ps), DEQUE_HEAD, ps);
-		if ((INST_RRB == inst || INST_RRR == inst) && ps->b->size >= 1)
+		if ((PS_INST_RRB == inst || PS_INST_RRR == inst) && ps->b->size >= 1)
 			inst_push(ps->b, inst_pop(ps->b, DEQUE_TAIL, ps), DEQUE_HEAD, ps);
 	}
+	#ifdef DEBUG
+	if (ps->a)
+		deque_print(ps->a);
+	if (ps->b)
+		deque_print(ps->b);
+	#endif
 }
 
 /*
@@ -144,7 +152,7 @@ void	inst_run(t_e_inst inst, t_ps *ps)
 * @praram[in] inst is instruction perform push_swap operation.
 * @praram[out] ps is necessary to free malloced deque and other arrays in ps.
 */
-void	inst_run_print(t_e_inst inst, t_ps *ps)
+void	inst_run_print(t_e_ps_inst inst, t_ps *ps)
 {
 	const char	*inst_str[] = {"sa\n", "sb\n", "ss\n", "pa\n", "pb\n",
 		"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"};
