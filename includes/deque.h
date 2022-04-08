@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 15:22:18 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/08 19:32:03 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:54:46 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include <stddef.h>
 # include "push_swap.h"
-# include "debug.h"
-
 /*
 * check forward declaration in push_swap.h
 */
@@ -55,11 +53,5 @@ void			deque_push(t_deque *d, t_deque_data data, t_e_deque where,
 					t_ps *ps);
 t_deque_data	deque_pop(t_deque *d, t_e_deque where, t_ps *ps);
 void			free_deque(t_deque *d);
-
-# ifdef DEBUG
-
-void			deque_print(t_deque *d);
-
-# endif
 
 #endif

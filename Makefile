@@ -6,7 +6,7 @@
 #    By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 16:06:51 by min-jo            #+#    #+#              #
-#    Updated: 2022/04/08 21:51:53 by min-jo           ###   ########.fr        #
+#    Updated: 2022/04/08 22:23:00 by min-jo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ bonus:		$(BOBJS)
 
 clean:
 	rm -f $(OBJS) $(BOBJS)
-	rm -f $(addprefix $(SRC_DIR), *.d)
+	rm -f $(OBJS:.o=.d)
+	rm -f $(BOBJS:.o=.d)
 	rm -f bonus
 
 fclean:		clean

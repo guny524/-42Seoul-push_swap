@@ -6,15 +6,13 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 19:45:37 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/08 20:25:39 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:54:50 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "push_swap.h"
 #include "error.h"
-
-#include "debug.h"
 
 /*
 * Malloc new node for deque and return it.
@@ -149,22 +147,3 @@ void	free_deque(t_deque *d)
 	}
 	free(d);
 }
-
-#ifdef DEBUG
-void	deque_print(t_deque *d)
-{
-	t_deque_node	*n = d->head.next;
-	int				cnt = 0;
-
-	printf("d : %p\n", d);
-	printf("head : %p, data : %d, before : %p, next : %p\n", &d->head, d->head.data, d->head.before, d->head.next);
-	printf("tail : %p, data : %d, before : %p, next : %p\n", &d->tail, d->tail.data, d->tail.before, d->tail.next);
-	while (n && n != &d->tail)
-	{
-		printf("cnt : %d, node : %p, data : %d, before : %p, next : %p\n", cnt, n, n->data, n->before, n->next);
-		n = n->next;
-		cnt++;
-	}
-	printf("\n");
-}
-#endif

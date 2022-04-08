@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sort_a_to_b.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: min-jo <min-jo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:07 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/07 09:22:50 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:55:34 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include "push_swap.h"
 #include "instruct.h"
-
-#include "debug.h"
 
 /*
 * Check if data exist in lis array.
@@ -100,9 +98,6 @@ void	sort_a_to_b(t_ps *ps)
 	while (ps->a->size != ps->lis_size)
 	{
 		find_not_lis(&ra, &rra, ps);
-		#ifdef DEBUG
-		printf("ra : %ld, rra : %ld\n", ra, rra);
-		#endif
 		if (ra <= rra)
 			mul_inst_run_print(PS_INST_RA, ra, ps);
 		else

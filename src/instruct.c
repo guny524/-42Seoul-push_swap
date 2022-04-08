@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:08:54 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/08 21:04:16 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:54:58 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include "push_swap.h"
 #include "instruct.h"
 #include "error.h"
-
-#include "debug.h"
 
 /*
 * Run pop instruction.
@@ -138,12 +136,6 @@ void	inst_run(t_e_ps_inst inst, t_ps *ps)
 		if ((PS_INST_RRB == inst || PS_INST_RRR == inst) && ps->b->size >= 1)
 			inst_push(ps->b, inst_pop(ps->b, DEQUE_TAIL, ps), DEQUE_HEAD, ps);
 	}
-	#ifdef DEBUG
-	if (ps->a)
-		deque_print(ps->a);
-	if (ps->b)
-		deque_print(ps->b);
-	#endif
 }
 
 /*

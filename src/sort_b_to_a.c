@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 15:46:30 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/08 21:48:33 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:55:55 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "push_swap.h"
 #include "deque.h"
 #include "sort.h"
-
-#include "debug.h"
 
 /*
 * Find the maximum value in deque d,
@@ -85,15 +83,8 @@ void	find_insert(t_deque *a, t_deque_data data, size_t *r, size_t *rr)
 		++cnt;
 	}
 	find_max(a, r, rr);
-	#ifdef DEBUG
-	printf("find max in find insert\n");
-	printf("ra : %ld, rra : %ld\n", *r, *rr);
-	#endif
 	*r += 1;
 	*rr -= 1;
-	#ifdef DEBUG
-	printf("ra : %ld, rra : %ld\n", *r, *rr);
-	#endif
 }
 
 /*
@@ -131,24 +122,9 @@ void	run_low_cost(t_ps *ps)
 	while (n != &ps->b->tail)
 	{
 		find_insert(ps->a, n->data, &ro.ra, &ro.rra);
-		#ifdef DEBUG
-		printf("find low cost value : %d\n", n->data);
-		printf("find low cost ra : %ld, rra : %ld\n", ro.ra, ro.rra);
-		printf("find low cost rb : %ld, rrb : %ld\n", ro.rb, ro.rrb);
-		#endif
 		tmp = update_fourway_min(ro);
-		#ifdef DEBUG
-		printf("update tmp ra : %ld, rra : %ld\n", tmp.ra, tmp.rra);
-		printf("update tmp rb : %ld, rrb : %ld\n", tmp.rb, tmp.rrb);
-		printf("update tmp rr : %ld, rrr : %ld\n", tmp.rr, tmp.rrr);
-		#endif
 		if (sum(tmp) < sum(min))
 			min = tmp;
-		#ifdef DEBUG
-		printf("min ra : %ld, rra : %ld\n", min.ra, min.rra);
-		printf("min rb : %ld, rrb : %ld\n", min.rb, min.rrb);
-		printf("min rr : %ld, rrr : %ld\n", min.rr, min.rrr);
-		#endif
 		n = n->next;
 		ro.rb++;
 		ro.rrb--;

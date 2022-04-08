@@ -6,7 +6,7 @@
 /*   By: min-jo <min-jo@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 20:42:15 by min-jo            #+#    #+#             */
-/*   Updated: 2022/04/08 21:13:35 by min-jo           ###   ########.fr       */
+/*   Updated: 2022/04/08 21:58:54 by min-jo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 #include "instruct.h"
 #include "get_next_line_bonus.h"
 #include "sort.h"
-
-#include "debug.h"
 
 static int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -40,20 +38,20 @@ static int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-static int	is_sorted(t_ps *ps)
+static void	is_sorted(t_ps *ps)
 {
 	t_deque_node	*n;
 
 	if (0 != ps->b->size)
-		return (0);
+		free_ps_error_print_exit(ps, "KO\n");
 	n = ps->a->head.next;
 	while (n->next != &ps->a->tail)
 	{
 		if (!(n->data < n->next->data))
-			return (0);
+			free_ps_error_print_exit(ps, "KO\n");
 		n = n->next;
 	}
-	return (1);
+	free_ps_error_print_exit(ps, "OK\n");
 }
 
 int	main(int argc, char *argv[])
@@ -69,24 +67,18 @@ int	main(int argc, char *argv[])
 	ps_parse_arg(argv, argc, &ps);
 	if (ps.a->size <= 1)
 		return (0);
-	#ifdef DEBUG
-	deque_print(ps.a);
-	#endif
 	ps.b = new_deque(&ps, DEQUE_B);
 	while (0 < get_next_line(0, &line))
 	{
 		cnt = 0;
 		while (cnt < 11 && ft_strncmp(line, inst_str[cnt],
-			ft_max(ft_strlen(line), ft_strlen(inst_str[cnt]))))
+				ft_max(ft_strlen(line), ft_strlen(inst_str[cnt]))))
 			++cnt;
 		free(line);
 		if (11 == cnt)
 			free_ps_error_print_exit(&ps, "Error\n");
 		inst_run(cnt, &ps);
 	}
-	if (is_sorted(&ps))
-		free_ps_error_print_exit(&ps, "OK\n");
-	else
-		free_ps_error_print_exit(&ps, "KO\n");
+	is_sorted(&ps);
 	return (0);
 }
